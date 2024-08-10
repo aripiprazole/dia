@@ -12,30 +12,29 @@ exception Eval_error of eval_error
 type eval_ctx = { pos : pos }
 
 (* Evaluates term into normal form *)
-let rec eval env =
-  let rec go env ({ pos } as ctx) = function
-    | TT_u -> V_u
-    | TT_bvar { value; _ } -> List.nth env value
-    | TT_src_pos { value; pos } -> go env { pos } value
-    | TT_pi (TTDomain { name; domain; icit }, codomain) ->
-        let domain = go env ctx domain in
-        V_pi (name, icit, domain, Closure { env; expr = codomain })
-    | TT_lam (domain, icit, codomain) ->
-        V_lam (domain, icit, Closure { env; expr = codomain })
-    | TT_subst (_, value, next) -> go (go env ctx value :: env) ctx next
-    | TT_hole ({ contents = Unsolved } as h) -> V_flex (h, [])
-    | TT_hole { contents = Solved v } -> v
-    | TT_app (callee, arguments) -> begin
-        match apply_sp env callee arguments with
-        | value -> value
-        | exception Eval_error ee ->
-            raise (Eval_error (EE_fail_with_pos (pos, ee)))
-      end
-    | TT_fvar _ -> raise (Eval_error (EE_panic "unimplemented"))
-    | TT_inserted_meta _ -> raise (Eval_error (EE_panic "unimplemented"))
-  in
+let rec eval env = eval' env { pos = Loc.synthesized }
 
-  go env { pos = Loc.synthesized }
+(* Eval internal impl *)
+and eval' env ({ pos } as ctx) = function
+  | TT_u -> V_u
+  | TT_bvar { value; _ } -> List.nth env value
+  | TT_src_pos { value; pos } -> eval' env { pos } value
+  | TT_pi (TTDomain { name; domain; icit }, codomain) ->
+      let domain = eval' env ctx domain in
+      V_pi (name, icit, domain, Closure { env; expr = codomain })
+  | TT_lam (domain, icit, codomain) ->
+      V_lam (domain, icit, Closure { env; expr = codomain })
+  | TT_subst (_, value, next) -> eval' (eval' env ctx value :: env) ctx next
+  | TT_hole ({ contents = Unsolved } as h) -> V_flex (h, [])
+  | TT_hole { contents = Solved v } -> v
+  | TT_app (callee, arguments) -> begin
+      match apply_sp env callee arguments with
+      | value -> value
+      | exception Eval_error ee ->
+          raise (Eval_error (EE_fail_with_pos (pos, ee)))
+    end
+  | TT_fvar _ -> raise (Eval_error (EE_panic "unimplemented"))
+  | TT_inserted_meta _ -> raise (Eval_error (EE_panic "unimplemented"))
 
 (* Applies a spine of arguments to a function *)
 and apply_sp env callee arguments =

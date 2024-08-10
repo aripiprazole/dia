@@ -1,19 +1,21 @@
 open Term
 open Types
+open Ctx
 
 let rec check ctx = function
-  | RE_src_pos { pos; value }, type_repr -> check { pos } (value, type_repr)
-  | RE_lam (parameter, value), V_pi (_, _, domain, codomain) -> assert false
-  | t, expected -> assert false
+  | RE_src_pos { pos; value }, type_repr ->
+      check { ctx with pos } (value, type_repr)
+  | RE_lam (_, _), V_pi (_, _, _, _) -> assert false
+  | _, _ -> assert false
 
 let rec infer ctx = function
   | RE_var _ -> assert false
-  | RE_src_pos { pos; value } -> infer { pos } value
-  | RE_lam (parameters, expr) -> assert false
-  | RE_app (callee, arguments) -> assert false
+  | RE_src_pos { pos; value } -> infer { ctx with pos } value
+  | RE_lam (_, _) -> assert false
+  | RE_app (_, _) -> assert false
   | RE_hole _ -> assert false
   | RE_pi (_, _, _) -> assert false
-  | RE_let (name, n, m) -> assert false
+  | RE_let (_, _, _) -> assert false
   | RE_cons (head, tail) -> infer ctx (RE_let (Symbol.make "_", head, tail))
 
 exception Unification_error
