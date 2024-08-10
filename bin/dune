@@ -1,0 +1,4 @@
+(executable
+ (public_name dia)
+ (name main)
+ (libraries dia))
