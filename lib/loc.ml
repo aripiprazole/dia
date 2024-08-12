@@ -4,8 +4,8 @@ type pos = {
   ending : int;
 }
 
-type 't loc = {
-  value : 't;
+type 'a t = {
+  value : 'a;
   pos : pos;
 }
 
