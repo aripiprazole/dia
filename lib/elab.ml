@@ -59,7 +59,7 @@ let rec rename m pren v =
       else tt_app (Term.Hole m') pren sp
   | Value.Rigid (x, sp) -> begin
       match Re.find_opt x pren.rename with
-      | None -> raise @@ raise @@ Unification_error Escaping_variable
+      | None -> raise @@ Unification_error Escaping_variable
       | Some x' ->
           tt_app (Term.Bvar (Debruijin.lvl_to_idx pren.domain x')) pren sp
     end
@@ -67,7 +67,7 @@ let rec rename m pren v =
       let cod = rename m (lift pren) (closure $$$ Value.var pren.codomain) in
       Term.Lam (name, icit, cod)
   | Value.Pi (name, icit, dom, cod) ->
-      let dom = Term.Dom { icit; name; domain = rename m pren dom } in
+      let dom = Term.Dom { icit; name; dom = rename m pren dom } in
       let cod = rename m (lift pren) (cod $$$ Value.var pren.codomain) in
       Term.Pi (dom, cod)
   | Value.U -> Term.U
@@ -113,9 +113,16 @@ let unify_catch (Ctx.{ lvl = l; _ } as ctx) t u =
 
 let fresh_meta Ctx.{ bounds; _ } = Term.Inserted_meta (fresh (), bounds)
 
-let insert ctx = function
+let rec insert ctx = function
   | (Term.Lam (_, Core.Impl, _) as tt), va -> (tt, va)
-  | t, va -> assert false
+  | tt, va -> begin
+      match va with
+      | Value.Pi (_, Core.Impl, _, cod) ->
+          let m = fresh_meta ctx in
+          let mv = eval ctx.env m in
+          insert ctx (apply_term Core.Impl tt m, cod $$$ mv)
+      | _ -> (tt, va)
+    end
 
 let rec check ctx = function
   | Core.Src_pos { pos; value }, type_repr ->

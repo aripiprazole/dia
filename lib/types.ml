@@ -5,20 +5,25 @@ type eval_error =
 exception Eval_error of eval_error
 
 let ( >> ) f g x = g (f x)
-let fresh () = Effect.perform @@ Value.Fresh_meta_var ()
 let ( <-- ) m v = Effect.perform @@ Value.Update_meta_var (m, v)
+let fresh () = Effect.perform @@ Value.Fresh_meta_var ()
 let lookup n = Effect.perform @@ Value.Lookup_meta_var n
+
+let apply_term icit tt arg =
+  match tt with
+  | Term.App (callee, arguments) -> Term.App (callee, (arg, icit) :: arguments)
+  | _ -> tt
 
 (* Evaluates term into normal form *)
 let rec eval env = function
   | Term.U -> Value.U
   | Term.Bvar { value; _ } -> List.nth env value
   | Term.Src_pos { value; _ } -> eval env value
-  | Term.Pi (Term.Dom { name; domain; icit }, codomain) ->
-      let domain = eval env domain in
-      Value.Pi (name, icit, domain, Closure { env; expr = codomain })
-  | Term.Lam (domain, icit, codomain) ->
-      Value.Lam (domain, icit, Closure { env; expr = codomain })
+  | Term.Pi (Term.Dom { name; dom; icit }, cod) ->
+      let dom = eval env dom in
+      Value.Pi (name, icit, dom, Closure { env; expr = cod })
+  | Term.Lam (dom, icit, cod) ->
+      Value.Lam (dom, icit, Closure { env; expr = cod })
   | Term.Subst (_, _, _) -> assert false
   | Term.Hole h -> begin
       match lookup h with
@@ -48,7 +53,7 @@ and ( $$ ) callee argument =
   | Value.Lam (_, _, Value.Closure { env; expr }) -> eval (argument :: env) expr
   | Value.Flex (m, sp) -> Value.Flex (m, (argument, Expl) :: sp)
   | Value.Rigid (m, sp) -> Value.Rigid (m, (argument, Expl) :: sp)
-  | _ -> raise (Eval_error (EE_panic "impossible"))
+  | _ -> raise @@ Eval_error (EE_panic "impossible")
 
 (* Takes out of flexible type values, forcing it into their original forms, so
    we can easily compare them. *)
@@ -74,13 +79,11 @@ let rec quote l value =
   | Value.Lam (domain, icit, _) as lam ->
       let codomain = lam $$ Value.Rigid (l, []) |> quote (Debruijin.shift l) in
       Term.Lam (domain, icit, codomain)
-  | Value.Pi (name, icit, domain, codomain) ->
-      let domain = quote l domain in
-      let codomain = Value.Lam (name, icit, codomain) in
-      let codomain =
-        codomain $$ Value.Rigid (l, []) |> quote (Debruijin.shift l)
-      in
-      Term.Pi (Dom { name; icit; domain }, codomain)
+  | Value.Pi (name, icit, dom, cod) ->
+      let dom = quote l dom in
+      let cod = Value.Lam (name, icit, cod) in
+      let cod = cod $$ Value.Rigid (l, []) |> quote (Debruijin.shift l) in
+      Term.Pi (Dom { name; icit; dom }, cod)
   | Value.U -> Term.U
 
 (* Normalises into normal form by: quoting and evaluating it after. *)

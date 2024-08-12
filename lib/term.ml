@@ -27,5 +27,5 @@ and dom =
   | Dom of {
       name : Symbol.t;
       icit : Core.icit;
-      domain : t;
+      dom : t;
     }
