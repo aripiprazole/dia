@@ -1,10 +1,11 @@
 open Types
-module Re = Map.Make (Int)
+module Ren = Map.Make (Int)
 
+(* Partial renaming *)
 type pren = {
-  domain : Debruijin.lvl;
-  codomain : Debruijin.lvl;
-  rename : Debruijin.lvl Re.t;
+  dom : Debruijin.lvl; (* domain *)
+  cod : Debruijin.lvl; (* codomain *)
+  ren : Debruijin.lvl Ren.t; (* renaming map *)
 }
 
 type error_kind =
@@ -25,22 +26,22 @@ exception Error of error
    σ : Partial_renaming Γ Δ
    --------------------------------------------------
    lift σ : Partial_renaming (Γ, x : A[σ]) (Δ, x : A) *)
-let lift { domain; codomain; rename } =
-  let rename = Re.add codomain domain rename in
-  { domain = domain + 1; codomain = codomain + 1; rename }
+let lift { dom; cod; ren } =
+  let ren = Ren.add cod dom ren in
+  { dom = dom + 1; cod = cod + 1; ren }
 
 (* Γ : Debruijin.lvl, Δ : Value.spine
    -------------------------------------------
    Partial_renaming Γ Δ *)
 let rec invert gamma = function
-  | [] -> { domain = 0; codomain = gamma; rename = Re.empty }
+  | [] -> { dom = 0; cod = gamma; ren = Ren.empty }
   | (t, _) :: sp -> begin
-      let { domain; rename; _ } = invert gamma sp in
+      let { dom; ren; _ } = invert gamma sp in
       match t |> force with
-      | Value.Rigid (lvl, []) when Option.is_none (Re.find_opt lvl rename) ->
-          let domain = domain + 1 in
-          let rename = rename |> Re.add lvl domain in
-          { domain; rename; codomain = gamma }
+      | Value.Rigid (lvl, []) when Option.is_none (Ren.find_opt lvl ren) ->
+          let dom = dom + 1 in
+          let ren = ren |> Ren.add lvl dom in
+          { dom; ren; cod = gamma }
       | _ -> raise @@ Unification_error Unify_error
     end
 
@@ -58,17 +59,16 @@ let rec rename m pren v =
       if m = m' then raise @@ Unification_error Occurs_check
       else tt_app (Term.Hole m') pren sp
   | Value.Rigid (x, sp) -> begin
-      match Re.find_opt x pren.rename with
+      match Ren.find_opt x pren.ren with
       | None -> raise @@ Unification_error Escaping_variable
-      | Some x' ->
-          tt_app (Term.Bvar (Debruijin.lvl_to_idx pren.domain x')) pren sp
+      | Some x' -> tt_app (Term.Bvar (Debruijin.lvl_to_idx pren.dom x')) pren sp
     end
   | Value.Lam (name, icit, closure) ->
-      let cod = rename m (lift pren) (closure $$$ Value.var pren.codomain) in
+      let cod = rename m (lift pren) (closure $$$ Value.var pren.cod) in
       Term.Lam (name, icit, cod)
   | Value.Pi (name, icit, dom, cod) ->
       let dom = Term.Dom { icit; name; dom = rename m pren dom } in
-      let cod = rename m (lift pren) (cod $$$ Value.var pren.codomain) in
+      let cod = rename m (lift pren) (cod $$$ Value.var pren.cod) in
       Term.Pi (dom, cod)
   | Value.U -> Term.U
 
@@ -124,20 +124,33 @@ let rec insert ctx = function
       | _ -> (tt, va)
     end
 
-let rec check ctx = function
+let rec check ctx t expected =
+  match (t, expected) with
   | Core.Src_pos { pos; value }, type_repr ->
-      check Ctx.{ ctx with pos } (value, type_repr)
+      check Ctx.{ ctx with pos } value type_repr
   | Core.Lam (_, _), Value.Pi (_, _, _, _) -> assert false
+  | Core.Hole _, _ -> fresh_meta ctx
   | t, expected ->
       let t, inferred = insert ctx (infer ctx t) in
       let _ = unify_catch ctx expected inferred in
       t
 
 and infer ctx = function
+  | Core.U -> (Term.U, Value.U)
   | Core.Var _ -> assert false
   | Core.Src_pos { pos; value } -> infer { ctx with pos } value
   | Core.Lam (_, _) -> assert false
   | Core.App (_, _) -> assert false
-  | Core.Hole _ -> assert false
-  | Core.Pi (_, _, _) -> assert false
+  | Core.As (term, expected) -> begin
+      let expected = eval ctx.env @@ check ctx expected Value.U in
+      let term = check ctx term expected in
+      (term, expected)
+    end
+  | Core.Hole _ ->
+      let meta = fresh_meta ctx in
+      (meta, eval ctx.env @@ fresh_meta ctx)
+  | Core.Pi (name, icit, dom, cod) ->
+      let dom = check ctx dom Value.U in
+      let cod = check (ctx |> Ctx.bind name (eval ctx.env dom)) cod Value.U in
+      (Term.Pi (Term.Dom { name; icit; dom }, cod), Value.U)
   | Core.Let (_, _, _) -> assert false
