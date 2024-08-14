@@ -1,4 +1,4 @@
-open Types
+open Aux
 module Ren = Map.Make (Int)
 
 (* Partial renaming *)

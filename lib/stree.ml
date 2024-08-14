@@ -5,12 +5,13 @@ type pat =
   | P_cons of Symbol.t * pat list
 
 (* Param p = {x} | x *)
-type param = Symbol.t * Core.icit
+type param = Param of Symbol.t * Core.icit
 
 (* Expr m n α τ =
    | U | ★
    | m a₀..aₙ
-   | match m with | φ₀ ⇒ n₀ ..| φₙ ⇒ nₙ
+   | match m with
+     | φ₀ ⇒ n₀ ..| φₙ ⇒ nₙ
    | λ p₀..pₙ. n
    | {x₀..xₙ : α} → τ
    | {α} → τ
@@ -36,7 +37,7 @@ type expr =
       expr : expr;
     }
   | E_forall of {
-      names : Symbol.t;
+      names : Symbol.t list;
       dom : expr;
       cod : expr;
     }
@@ -47,4 +48,36 @@ type expr =
     }
 
 (* Arg a = {m} | m *)
-and param = expr * Core.icit
+and arg = Arg of expr * Core.icit
+
+(* Constructor con =
+   | x : τ
+   | x *)
+type constructor =
+  | Constructor of {
+      name : Symbol.t;
+      type_repr : expr option;
+    }
+
+(* Toplevel tl =
+   | inductive x : α
+     | con₀ ..| conₙ
+   | inductive x
+     | con₀ ..| conₙ
+   | x : α
+   | x = m *)
+type top_level =
+  | TL_src_pos of top_level Loc.t
+  | TL_inductive of {
+      name : Symbol.t;
+      type_repr : expr option;
+      constructors : constructor list;
+    }
+  | TL_sig of {
+      name : Symbol.t;
+      type_repr : expr;
+    }
+  | TL_clause of {
+      name : Symbol.t;
+      value : expr;
+    }
