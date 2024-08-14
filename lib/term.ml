@@ -29,3 +29,11 @@ and dom =
       icit : Core.icit;
       dom : t;
     }
+
+let rec lam_dom ls = function
+| Lam (dom, icit, cod) -> (dom, icit) :: lam_dom ls cod
+| _ -> []
+
+let rec lam_cod = function
+| Lam (_, _, cod) -> lam_cod cod
+| _ -> None

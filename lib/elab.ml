@@ -34,16 +34,16 @@ let lift { dom; cod; ren } =
    -------------------------------------------
    Partial_renaming Γ Δ *)
 let rec invert gamma = function
-  | [] -> { dom = 0; cod = gamma; ren = Ren.empty }
-  | (t, _) :: sp -> begin
-      let { dom; ren; _ } = invert gamma sp in
-      match t |> force with
-      | Value.Rigid (lvl, []) when Option.is_none (Ren.find_opt lvl ren) ->
-          let dom = dom + 1 in
-          let ren = ren |> Ren.add lvl dom in
-          { dom; ren; cod = gamma }
-      | _ -> raise @@ Unification_error Unify_error
-    end
+| [] -> { dom = 0; cod = gamma; ren = Ren.empty }
+| (t, _) :: sp -> begin
+    let { dom; ren; _ } = invert gamma sp in
+    match t |> force with
+    | Value.Rigid (lvl, []) when Option.is_none (Ren.find_opt lvl ren) ->
+        let dom = dom + 1 in
+        let ren = ren |> Ren.add lvl dom in
+        { dom; ren; cod = gamma }
+    | _ -> raise @@ Unification_error Unify_error
+  end
 
 (* Perform the partial renaming on rhs, while also checking for "m" occurrences. *)
 let rec rename m pren v =
@@ -114,15 +114,15 @@ let unify_catch (Ctx.{ lvl = l; _ } as ctx) t u =
 let fresh_meta Ctx.{ bounds; _ } = Term.Inserted_meta (fresh (), bounds)
 
 let rec insert ctx = function
-  | (Term.Lam (_, Core.Impl, _) as tt), va -> (tt, va)
-  | tt, va -> begin
-      match va with
-      | Value.Pi (_, Core.Impl, _, cod) ->
-          let m = fresh_meta ctx in
-          let mv = eval ctx.env m in
-          insert ctx (apply_term Core.Impl tt m, cod $$$ mv)
-      | _ -> (tt, va)
-    end
+| (Term.Lam (_, Core.Impl, _) as tt), va -> (tt, va)
+| tt, va -> begin
+    match va with
+    | Value.Pi (_, Core.Impl, _, cod) ->
+        let m = fresh_meta ctx in
+        let mv = eval ctx.env m in
+        insert ctx (apply_term Core.Impl tt m, cod $$$ mv)
+    | _ -> (tt, va)
+  end
 
 let rec check ctx t expected =
   match (t, expected) with
@@ -136,21 +136,21 @@ let rec check ctx t expected =
       t
 
 and infer ctx = function
-  | Core.U -> (Term.U, Value.U)
-  | Core.Var _ -> assert false
-  | Core.Src_pos { pos; value } -> infer { ctx with pos } value
-  | Core.Lam (_, _) -> assert false
-  | Core.App (_, _) -> assert false
-  | Core.As (term, expected) -> begin
-      let expected = eval ctx.env @@ check ctx expected Value.U in
-      let term = check ctx term expected in
-      (term, expected)
-    end
-  | Core.Hole _ ->
-      let meta = fresh_meta ctx in
-      (meta, eval ctx.env @@ fresh_meta ctx)
-  | Core.Pi (name, icit, dom, cod) ->
-      let dom = check ctx dom Value.U in
-      let cod = check (ctx |> Ctx.bind name (eval ctx.env dom)) cod Value.U in
-      (Term.Pi (Term.Dom { name; icit; dom }, cod), Value.U)
-  | Core.Let (_, _, _) -> assert false
+| Core.U -> (Term.U, Value.U)
+| Core.Var _ -> assert false
+| Core.Src_pos { pos; value } -> infer { ctx with pos } value
+| Core.Lam (_, _) -> assert false
+| Core.App (_, _) -> assert false
+| Core.As (term, expected) -> begin
+    let expected = eval ctx.env @@ check ctx expected Value.U in
+    let term = check ctx term expected in
+    (term, expected)
+  end
+| Core.Hole _ ->
+    let meta = fresh_meta ctx in
+    (meta, eval ctx.env @@ fresh_meta ctx)
+| Core.Pi (name, icit, dom, cod) ->
+    let dom = check ctx dom Value.U in
+    let cod = check (ctx |> Ctx.bind name (eval ctx.env dom)) cod Value.U in
+    (Term.Pi (Term.Dom { name; icit; dom }, cod), Value.U)
+| Core.Let (_, _, _) -> assert false

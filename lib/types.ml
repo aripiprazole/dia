@@ -16,27 +16,26 @@ let apply_term icit tt arg =
 
 (* Evaluates term into normal form *)
 let rec eval env = function
-  | Term.U -> Value.U
-  | Term.Bvar { value; _ } -> List.nth env value
-  | Term.Src_pos { value; _ } -> eval env value
-  | Term.Pi (Term.Dom { name; dom; icit }, cod) ->
-      let dom = eval env dom in
-      Value.Pi (name, icit, dom, Closure { env; expr = cod })
-  | Term.Lam (dom, icit, cod) ->
-      Value.Lam (dom, icit, Closure { env; expr = cod })
-  | Term.Subst (_, _, _) -> assert false
-  | Term.Hole h -> begin
-      match lookup h with
-      | Value.Solved v -> v
-      | Value.Unsolved -> Value.Flex (h, [])
-    end
-  | Term.App (callee, arguments) -> begin
-      let pos = assert false in
-      try apply_sp env callee arguments with
-      | Eval_error ee -> raise (Eval_error (EE_fail_with_pos (pos, ee)))
-    end
-  | Term.Fvar _ -> raise @@ Eval_error (EE_panic "unimplemented")
-  | Term.Inserted_meta _ -> raise @@ Eval_error (EE_panic "unimplemented")
+| Term.U -> Value.U
+| Term.Bvar { value; _ } -> List.nth env value
+| Term.Src_pos { value; _ } -> eval env value
+| Term.Pi (Term.Dom { name; dom; icit }, cod) ->
+    let dom = eval env dom in
+    Value.Pi (name, icit, dom, Closure { env; expr = cod })
+| Term.Lam (dom, icit, cod) -> Value.Lam (dom, icit, Closure { env; expr = cod })
+| Term.Subst (_, _, _) -> assert false
+| Term.Hole h -> begin
+    match lookup h with
+    | Value.Solved v -> v
+    | Value.Unsolved -> Value.Flex (h, [])
+  end
+| Term.App (callee, arguments) -> begin
+    let pos = assert false in
+    try apply_sp env callee arguments with
+    | Eval_error ee -> raise (Eval_error (EE_fail_with_pos (pos, ee)))
+  end
+| Term.Fvar _ -> raise @@ Eval_error (EE_panic "unimplemented")
+| Term.Inserted_meta _ -> raise @@ Eval_error (EE_panic "unimplemented")
 
 (* Applies a spine of arguments to a function *)
 and apply_sp env callee arguments =
@@ -58,13 +57,13 @@ and ( $$ ) callee argument =
 (* Takes out of flexible type values, forcing it into their original forms, so
    we can easily compare them. *)
 let rec force = function
-  | Value.Flex (m, sp) as v -> begin
-      match lookup m with
-      | Value.Unsolved -> v
-      | Value.Solved callee ->
-          force (sp |> List.map fst |> List.fold_left ( $$ ) callee)
-    end
-  | otherwise -> otherwise
+| Value.Flex (m, sp) as v -> begin
+    match lookup m with
+    | Value.Unsolved -> v
+    | Value.Solved callee ->
+        force (sp |> List.map fst |> List.fold_left ( $$ ) callee)
+  end
+| otherwise -> otherwise
 
 (* Readback values into core expressions *)
 let rec quote l value =

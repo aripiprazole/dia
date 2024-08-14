@@ -9,12 +9,11 @@ type t =
 
 and closure =
   | Closure of {
-      env : env;
+      env : t list;
       expr : Term.t;
     }
 
 and spine = (t * Core.icit) list
-and env = t list
 
 type hole =
   | Solved of t
@@ -29,6 +28,10 @@ let meta x = Flex (x, [])
 type _ Effect.t += Lookup_meta_var : Term.meta_var -> hole Effect.t
 type _ Effect.t += Update_meta_var : Term.meta_var * t -> unit Effect.t
 type _ Effect.t += Fresh_meta_var : unit -> Term.meta_var Effect.t
+
+let ( <-- ) m v = Effect.perform @@ Update_meta_var (m, v)
+let fresh () = Effect.perform @@ Fresh_meta_var ()
+let lookup n = Effect.perform @@ Lookup_meta_var n
 
 module Meta_env = Map.Make (Int)
 

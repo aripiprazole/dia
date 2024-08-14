@@ -10,3 +10,4 @@ type 'a t = {
 }
 
 let synthesized = { file = ""; start = 0; ending = 0 }
+let unwrap { value; pos = _ } = value

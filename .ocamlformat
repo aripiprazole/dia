@@ -3,3 +3,4 @@ version = 0.26.2
 exp-grouping = preserve
 type-decl = sparse
 break-cases = all
+function-indent = 0
