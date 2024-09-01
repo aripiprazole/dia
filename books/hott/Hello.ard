@@ -1,0 +1,5 @@
+\data Vec (A : Type) (n : Nat) \elim n
+  | zero => vnil
+  | succ => vcons A (Vec A n)
+
+\func hello (x : Nat) : Nat = x

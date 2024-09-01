@@ -13,3 +13,14 @@ type t =
   | Hole of string Loc.t option
   | Pi of Symbol.t * icit * t * t
   | Let of string Loc.t * t * t
+  | Data of {
+      name : string Loc.t;
+      tt : t;
+      constructors : constructor list;
+      next : t;
+    }
+
+and constructor = {
+  name : string Loc.t;
+  tt : t;
+}

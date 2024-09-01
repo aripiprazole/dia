@@ -26,7 +26,7 @@ type expr =
   | E_var of Symbol.t
   | E_app of {
       callee : expr;
-      spine : (expr * Core.icit) list;
+      spine : arg list;
     }
   | E_case of {
       scrutinee : expr;

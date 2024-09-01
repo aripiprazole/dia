@@ -47,9 +47,9 @@ let rec invert gamma = function
 
 (* Perform the partial renaming on rhs, while also checking for "m" occurrences. *)
 let rec rename m pren v =
-  let rec tt_app tt pren sp =
-    if List.is_empty sp then tt
-    else
+  let rec tt_app tt pren = function
+  | [] -> tt
+  | sp ->
       let sp' = sp |> List.map (fun (v, icit) -> (rename m pren v, icit)) in
       Term.App (tt_app tt pren sp, sp')
   in
@@ -154,3 +154,4 @@ and infer ctx = function
     let cod = check (ctx |> Ctx.bind name (eval ctx.env dom)) cod Value.U in
     (Term.Pi (Term.Dom { name; icit; dom }, cod), Value.U)
 | Core.Let (_, _, _) -> assert false
+| Core.Data _ -> assert false

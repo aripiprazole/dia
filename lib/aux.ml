@@ -17,7 +17,7 @@ let apply_term icit tt arg =
 (* Evaluates term into normal form *)
 let rec eval env = function
 | Term.U -> Value.U
-| Term.Bvar { value; _ } -> List.nth env value
+| Term.Bvar (Debruijin.Idx { value; _ }) -> List.nth env value
 | Term.Src_pos { value; _ } -> eval env value
 | Term.Pi (Term.Dom { name; dom; icit }, cod) ->
     let dom = eval env dom in

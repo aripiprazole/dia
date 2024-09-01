@@ -30,8 +30,16 @@ and dom =
       dom : t;
     }
 
-let rec lam_dom ls = function
-| Lam (dom, icit, cod) -> (dom, icit) :: lam_dom ls cod
+let rec pi_dom = function
+| Pi (dom, cod) -> dom :: pi_dom cod
+| _ -> []
+
+let rec pi_cod = function
+| Pi (_, cod) -> pi_cod cod
+| _ -> None
+
+let rec lam_dom = function
+| Lam (dom, icit, cod) -> (dom, icit) :: lam_dom cod
 | _ -> []
 
 let rec lam_cod = function
