@@ -1,4 +1,5 @@
 open Aux
+open Core
 module Ren = Map.Make (Int)
 
 (* Partial renaming *)
@@ -126,32 +127,32 @@ let rec insert ctx = function
 
 let rec check ctx t expected =
   match (t, expected) with
-  | Core.Src_pos { pos; value }, type_repr ->
+  | Expr.Src_pos { pos; value }, type_repr ->
       check Ctx.{ ctx with pos } value type_repr
-  | Core.Lam (_, _), Value.Pi (_, _, _, _) -> assert false
-  | Core.Hole _, _ -> fresh_meta ctx
+  | Expr.Lam (_, _), Value.Pi (_, _, _, _) -> assert false
+  | Expr.Hole _, _ -> fresh_meta ctx
   | t, expected ->
       let t, inferred = insert ctx (infer ctx t) in
       let _ = unify_catch ctx expected inferred in
       t
 
 and infer ctx = function
-| Core.U -> (Term.U, Value.U)
-| Core.Var _ -> assert false
-| Core.Src_pos { pos; value } -> infer { ctx with pos } value
-| Core.Lam (_, _) -> assert false
-| Core.App (_, _) -> assert false
-| Core.As (term, expected) -> begin
+| Expr.U -> (Term.U, Value.U)
+| Expr.Var _ -> assert false
+| Expr.Src_pos { pos; value } -> infer { ctx with pos } value
+| Expr.Lam (_, _) -> assert false
+| Expr.App (_, _) -> assert false
+| Expr.As (term, expected) -> begin
     let expected = eval ctx.env @@ check ctx expected Value.U in
     let term = check ctx term expected in
     (term, expected)
   end
-| Core.Hole _ ->
+| Expr.Hole _ ->
     let meta = fresh_meta ctx in
     (meta, eval ctx.env @@ fresh_meta ctx)
-| Core.Pi (name, icit, dom, cod) ->
+| Expr.Pi (name, icit, dom, cod) ->
     let dom = check ctx dom Value.U in
     let cod = check (ctx |> Ctx.bind name (eval ctx.env dom)) cod Value.U in
     (Term.Pi (Term.Dom { name; icit; dom }, cod), Value.U)
-| Core.Let (_, _, _) -> assert false
-| Core.Data _ -> assert false
+| Expr.Let (_, _, _) -> assert false
+| Expr.Data _ -> assert false
