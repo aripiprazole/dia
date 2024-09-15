@@ -1,2 +1,8 @@
 (library
- (name dia))
+ (name dia)
+ (libraries menhirLib))
+
+(menhir
+ (modules parser))
+
+(ocamllex lexer)

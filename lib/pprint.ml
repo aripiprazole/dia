@@ -2,8 +2,8 @@ open Term
 open Format
 
 let icit_to_pi_prefix = function
-| Core.Impl -> ""
-| Core.Expl -> "∀"
+| Syntax.Impl -> ""
+| Syntax.Expl -> "∀"
 
 let rec pprint prec ns = function
 | Src_pos { value; _ } -> pprint prec ns value
@@ -16,8 +16,8 @@ let rec pprint prec ns = function
 | App (callee, sp) ->
     List.fold_left
       (fun acc -> function
-        | next, Core.Impl -> sprintf "%s {%s}" acc (pprint prec ns next)
-        | next, Core.Expl -> sprintf "%s {%s}" acc (pprint prec ns next))
+        | next, Syntax.Impl -> sprintf "%s {%s}" acc (pprint prec ns next)
+        | next, Syntax.Expl -> sprintf "%s {%s}" acc (pprint prec ns next))
       (pprint prec ns callee) sp
 | U -> "★"
 | Pi (Dom { icit; _ }, cod) as p ->
@@ -30,17 +30,17 @@ let rec pprint prec ns = function
 | _ -> assert false
 
 and pp_pi_param prec ns = function
-| Dom { name = Some name; icit = Core.Expl; dom } ->
+| Dom { name = Some name; icit = Syntax.Expl; dom } ->
     sprintf "(%s : %s)" (Loc.unwrap name) (pprint prec ns dom)
-| Dom { name = Some name; icit = Core.Impl; dom } ->
+| Dom { name = Some name; icit = Syntax.Impl; dom } ->
     sprintf "{%s : %s}" (Loc.unwrap name) (pprint prec ns dom)
-| Dom { name = None; icit = Core.Expl; dom } ->
+| Dom { name = None; icit = Syntax.Expl; dom } ->
     sprintf "%s" (pprint prec ns dom)
-| Dom { name = None; icit = Core.Impl; dom } ->
+| Dom { name = None; icit = Syntax.Impl; dom } ->
     sprintf "{%s}" (pprint prec ns dom)
 
 and pp_lam_param = function
-| Some name, Core.Expl -> sprintf "%s" (Loc.unwrap name)
-| Some name, Core.Impl -> sprintf "{%s}" (Loc.unwrap name)
-| None, Core.Expl -> sprintf "_"
-| None, Core.Impl -> sprintf "{_}"
+| Some name, Syntax.Expl -> sprintf "%s" (Loc.unwrap name)
+| Some name, Syntax.Impl -> sprintf "{%s}" (Loc.unwrap name)
+| None, Syntax.Expl -> sprintf "_"
+| None, Syntax.Impl -> sprintf "{_}"

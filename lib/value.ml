@@ -3,8 +3,8 @@ open Effect.Deep
 type t =
   | Flex of Term.meta_var * spine
   | Rigid of Debruijin.lvl * spine
-  | Lam of Symbol.t * Core.icit * closure
-  | Pi of Symbol.t * Core.icit * t * closure
+  | Lam of Symbol.t * Syntax.icit * closure
+  | Pi of Symbol.t * Syntax.icit * t * closure
   | U
 
 and closure =
@@ -13,7 +13,7 @@ and closure =
       expr : Term.t;
     }
 
-and spine = (t * Core.icit) list
+and spine = (t * Syntax.icit) list
 
 type hole =
   | Solved of t

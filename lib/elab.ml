@@ -115,13 +115,13 @@ let unify_catch (Ctx.{ lvl = l; _ } as ctx) t u =
 let fresh_meta Ctx.{ bounds; _ } = Term.Inserted_meta (fresh (), bounds)
 
 let rec insert ctx = function
-| (Term.Lam (_, Core.Impl, _) as tt), va -> (tt, va)
+| (Term.Lam (_, Syntax.Impl, _) as tt), va -> (tt, va)
 | tt, va -> begin
     match va with
-    | Value.Pi (_, Core.Impl, _, cod) ->
+    | Value.Pi (_, Syntax.Impl, _, cod) ->
         let m = fresh_meta ctx in
         let mv = eval ctx.env m in
-        insert ctx (apply_term Core.Impl tt m, cod $$$ mv)
+        insert ctx (apply_term Syntax.Impl tt m, cod $$$ mv)
     | _ -> (tt, va)
   end
 
@@ -155,4 +155,3 @@ and infer ctx = function
     let cod = check (ctx |> Ctx.bind name (eval ctx.env dom)) cod Value.U in
     (Term.Pi (Term.Dom { name; icit; dom }, cod), Value.U)
 | Expr.Let (_, _, _) -> assert false
-| Expr.Data _ -> assert false

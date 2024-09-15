@@ -1,6 +1,6 @@
 type parameter = {
   name : string Loc.t;
-  icit : Core.icit;
+  icit : Syntax.icit;
 }
 
 type bound =
@@ -16,8 +16,8 @@ type t =
   | Src_pos of t Loc.t
   | Bvar of Debruijin.idx
   | Fvar of Debruijin.lvl
-  | Lam of Symbol.t * Core.icit * t
-  | App of t * (t * Core.icit) list
+  | Lam of Symbol.t * Syntax.icit * t
+  | App of t * (t * Syntax.icit) list
   | Hole of meta_var
   | Pi of dom * t
   | Subst of Symbol.t * t * t
@@ -26,7 +26,7 @@ type t =
 and dom =
   | Dom of {
       name : Symbol.t;
-      icit : Core.icit;
+      icit : Syntax.icit;
       dom : t;
     }
 
