@@ -12,18 +12,18 @@
 %token DOT (* . *)
 %token ARROW (* -> *)
 %token DOUBLE_ARROW (* => *)
-%token HYPOTHESIS (* - *)
 %token MATCH (* match *)
 %token WITH (* with *)
 %token IN (* in *)
 %token EQUALS (* = *)
+%token DEF_EQUALS (* := *)
 %token COLON (* : *)
-%token QUESTION_MARK (* ? *)
 %token LET (* let *)
 %token PRAGMA (* #pragma *)
-%token SET (* Set *)
 %token BAR (* | *)
 %token FUN (* fun *)
+%token INDUCTIVE (* inductive *)
+%token COMMA (* , *)
 
 %token EOF
 
@@ -35,68 +35,52 @@ let symbol := name = ID; { Symbol.make name }
 let infix_symbol := name = INFIX_ID; { Symbol.make name }
 
 let expr :=
-  | constructors = nonempty_list(constructor);
-    { Expr.Inductive constructors }
-  | SET;
-    { Expr.U }
-  | p = parameter; ARROW; option(nonempty_list(HYPOTHESIS)); e = expr;
-    { e_pi p e }
-  | FUN; ps = nonempty_list(symbol); ARROW; e = expr;
-    { e_lam ps e }
-  | callee = expr; arg = expr;
-    { e_app callee Expl arg }
-  | callee = expr; LEFT_BRACES; arg = expr; RIGHT_BRACES;
-    { e_app callee Impl arg }
-  | MATCH; scrutinee = expr; WITH; option(BAR); cases = separated_nonempty_list(BAR, case);
-    { e_match scrutinee cases }
-  | expr_atom
+  | INDUCTIVE; cs = list(constructor); { Expr.Inductive cs }
+  | FUN; ps = nonempty_list(symbol); ARROW; e = expr; { e_lam ps e }
+  | MATCH; scrutinee = expr; WITH; cases = list(case); { e_match scrutinee cases }
+  | LET; name = symbol; DEF_EQUALS; value = expr; IN; body = expr; { e_let name value body }
+  | e_pi
+  | e_infix
 
-let constructor :=
-  | BAR; name = def_name; COLON; tt = expr;
-    { Expr.Constructor { name; tt; } }
+let constructor := BAR; name = def_name; tt = type_repr; { Expr.Constructor { name; tt; } }
 
 let file :=
-  | EOF;
-    { Program { hashbang = None; declarations = [] } }
-  | decls = nonempty_list(decl); EOF;
-    { Program { hashbang = None; declarations = decls } }
-
-let name :=
-  | name = ID;
-    { Loc.{ value = name; pos = Loc.synthesized } }
+  | decls = list(decl); EOF; { Program { hashbang = None; declarations = decls } }
 
 let parameter :=
-  | LEFT_PARENS; names = nonempty_list(name); COLON; tt = expr; RIGHT_PARENS;
-    { Expr.Parameter { names; tt; icit = Expl } }
-  | LEFT_BRACES; names = nonempty_list(name); COLON; tt = expr; RIGHT_BRACES;
-    { Expr.Parameter { names; tt; icit = Impl } }
+  | LEFT_PARENS; names = nonempty_list(symbol); tt = option(type_repr); RIGHT_PARENS; { Expr.Parameter { names; tt = Option.value ~default:Expr.Hole tt; icit = Expl } }
+  | LEFT_BRACES; names = nonempty_list(symbol); tt = option(type_repr); RIGHT_BRACES; { Expr.Parameter { names; tt = Option.value ~default:Expr.Hole tt; icit = Impl } }
 
 let def_name :=
-  | name = name; { Prefix name }
-  | LEFT_PARENS; name = name; RIGHT_PARENS; { Infix name }
+  | name = symbol; { Prefix name }
+  | LEFT_PARENS; name = symbol; RIGHT_PARENS; { Infix name }
+
+let type_repr := COLON; tt = tt; { tt }
 
 let decl :=
-  | LET; name = def_name; COLON; tt = option(expr); EQUALS; value = expr;
-    { TopLevel.Definition { name; parameters = []; tt = Option.value ~default:(Expr.Hole None) tt; value } }
-  | LET; name = def_name; parameters = nonempty_list(parameter); COLON; tt = option(expr); EQUALS; value = expr;
-    { TopLevel.Definition { name; parameters; tt = Option.value ~default:(Expr.Hole None) tt; value } }
+  | LET; name = def_name; parameters = list(parameter); tt = option(type_repr); DEF_EQUALS; value = expr;
+    { TopLevel.Definition { name; parameters; tt = Option.value ~default:Expr.Hole tt; value } }
 
-let case := pattern = pattern; DOUBLE_ARROW; expr = expr; { (pattern, expr) }
+let case := BAR; p = pattern; DOUBLE_ARROW; e = primary; { (p, e) }
 
 let pattern :=
-  | name = symbol;
-    { Pattern.Var name }
-  | LEFT_PARENS; name = def_name; args = list(pattern); RIGHT_PARENS;
-    { Pattern.Constructor { name; args } }
+  | name = symbol; { Pattern.Var name }
+  | LEFT_PARENS; name = def_name; args = list(pattern); RIGHT_PARENS; { Pattern.Constructor { name; args } }
 
-let expr_atom :=
-  | n = NUMBER;
-    { Expr.Num n }
-  | lhs = expr; name = infix_symbol; rhs = expr;
-    { e_app (e_app (Expr.Var name) Expl lhs) Expl rhs }
-  | QUESTION_MARK; name = symbol;
-    { Expr.Hole name }
-  | LET; name = symbol; EQUALS; value = expr; IN; body = expr;
-    { e_let name value body }
-  | LEFT_PARENS; expr = expr; RIGHT_PARENS;
-    { expr }
+let e_app :=
+  | primary
+  | callee = e_app; arg = primary; { e_app callee Expl arg }
+  | callee = e_app; LEFT_BRACES; arg = expr; RIGHT_BRACES; { e_app callee Impl arg }
+
+let e_infix := lhs = primary; op = infix_symbol; rhs = primary; { curry (Expr.Var op) [(Expl, lhs); (Expl, rhs)] }
+
+let e_pi :=
+  | e_app
+  | d = e_pi; ARROW; c = primary; { e_pi d c }
+
+let tt := e_pi | e_infix
+
+let primary :=
+  | n = NUMBER; { Expr.Num n }
+  | name = symbol; { Expr.Var name }
+  | LEFT_PARENS; expr = expr; RIGHT_PARENS; { expr }

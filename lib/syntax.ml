@@ -3,9 +3,9 @@ type icit =
   | Impl
 
 type name =
-  | Prefix of string Loc.t
-  | Infix of string Loc.t
-  | Postfix of string Loc.t
+  | Prefix of Symbol.t
+  | Infix of Symbol.t
+  | Postfix of Symbol.t
 
 module Pattern = struct
   type t =
@@ -32,15 +32,11 @@ module Expr = struct
         icit : icit;
         arg : t;
       }
-    | As of {
-        expr : t;
-        tt : t;
-      }
-    | Hole of Symbol.t
     | Pi of {
-        domain : parameter;
+        domain : t;
         codomain : t;
       }
+    | Hole
     | Let of {
         name : Symbol.t;
         value : t;
@@ -60,7 +56,7 @@ module Expr = struct
 
   and parameter =
     | Parameter of {
-        names : string Loc.t list;
+        names : Symbol.t list;
         icit : icit;
         tt : t;
       }
@@ -77,7 +73,7 @@ module TopLevel = struct
       }
     | Pragma of {
         name : string Loc.t;
-        value : string Loc.t;
+        arguments : string Loc.t list;
       }
 end
 
@@ -92,3 +88,9 @@ let e_let name value next = Expr.Let { name; value; next }
 let e_match scrutinee cases = Expr.Match { scrutinee; cases }
 let e_lam params body = Expr.Lam { params; body }
 let e_pi domain codomain = Expr.Pi { domain; codomain }
+
+let curry callee args =
+  args
+  |> List.fold_left
+       (fun callee (icit, arg) -> Expr.App { callee; icit; arg })
+       callee

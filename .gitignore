@@ -1,2 +1,4 @@
 *.agdai
 _build
+
+lib/parser.conflicts

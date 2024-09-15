@@ -2,7 +2,8 @@
   open Parser
 }
 
-let var = ['a'-'z' 'A'-'Z'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
+let var = ['a'-'z' 'A'-'Z'] ['a'-'z' 'A'-'Z' '0'-'9' '_' '+' '-' '*' '/' '^' '=' '<' '>' '!' '&' '|' '~' '?' '%' ':']*
+let infix = ['+' '-' '*' '/' '^' '=' '<' '>' '!' '&' '|' '~' '?' '%' ':']+
 
 rule token = parse
     [' ' '\t' '\n' '\r']+ { token lexbuf }
@@ -20,8 +21,9 @@ rule token = parse
   | "}" { RIGHT_BRACES }
   | "." { DOT }
   | "=" { EQUALS }
+  | ":=" { DEF_EQUALS }
   | ":" { COLON }
-  | "?" { QUESTION_MARK }
+  | infix { INFIX_ID (Lexing.lexeme lexbuf) }
   | var { ID (Lexing.lexeme lexbuf) }
   | ['0'-'9']+ { NUMBER (int_of_string (Lexing.lexeme lexbuf)) }
   | eof { EOF }
