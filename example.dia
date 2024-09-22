@@ -3,12 +3,12 @@ let (->) (A : Set) (B : Set) : Set :=
 
 let Nat :=
 | zero : Nat
-| succ : Nat -> Nat.
+| succ : Nat -> Nat
 
 #pragma NATURAL Nat
 
 let (=) {A : Set} (a b : A) : Set := inductive
-| refl : a = a.
+| refl : a = a
 
 let Vect (a : Set) (n : Nat) : Set :=
 | cons : (head : a) -> (tail : Vect a n) -> Vect a (n + 1)
@@ -22,16 +22,16 @@ let (++) {a : Set} {n m : Nat} (v : Vect a n) (w : Vect a m) : Vect a (n + m) :=
 (* Finite numbers *)
 let Fin (n : Nat) : Set := inductive
 | fzero : Fin (n + 1)
-| fsucc : Fin n -> Fin (n + 1).
+| fsucc : Fin n -> Fin (n + 1)
 
 let (<) {n m : Nat} := inductive
 | z<s : n < m
 | s<s :
   n < m
   ---------
-  n < m + 1.
+  n < m + 1
 
 let False : Set := inductive
 
 let absurd {a : Set} (f : False) : a :=
-  match f with | ()
+  match f with

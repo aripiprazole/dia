@@ -1,3 +1,1 @@
-open Alcotest
-
-let () = run "Unify" []
+let () = print_endline "no tests"

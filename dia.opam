@@ -13,6 +13,9 @@ bug-reports: "https://github.com/aripiprazole/dia/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.16"}
+  "fmt"
+  "ppx_deriving"
+  "ppx_expect"
   "odoc" {with-doc}
 ]
 build: [

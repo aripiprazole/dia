@@ -2,12 +2,14 @@ type parameter = {
   name : string Loc.t;
   icit : Syntax.icit;
 }
+[@@deriving show]
 
 type bound =
   | Bound
   | Defined
+[@@deriving show]
 
-type meta_var = Meta_var of int
+type meta_var = Meta_var of int [@@deriving show]
 
 (* Core programming language for dia. It does have explicit
    substitutions for better error messages as [`Let`] *)
@@ -22,6 +24,7 @@ type t =
   | Pi of dom * t
   | Subst of Symbol.t * t * t
   | Inserted_meta of meta_var * bound list
+[@@deriving show]
 
 and dom =
   | Dom of {
@@ -29,6 +32,7 @@ and dom =
       icit : Syntax.icit;
       dom : t;
     }
+[@@deriving show]
 
 let rec pi_dom = function
 | Pi (dom, cod) -> dom :: pi_dom cod

@@ -1,11 +1,13 @@
 type icit =
   | Expl
   | Impl
+[@@deriving show]
 
 type name =
   | Prefix of Symbol.t
   | Infix of Symbol.t
   | Postfix of Symbol.t
+[@@deriving show]
 
 module Pattern = struct
   type t =
@@ -14,6 +16,7 @@ module Pattern = struct
         args : t list;
       }
     | Var of Symbol.t
+  [@@deriving show]
 end
 
 module Expr = struct
@@ -47,12 +50,14 @@ module Expr = struct
         cases : (Pattern.t * t) list;
       }
     | Inductive of constructor list
+  [@@deriving show]
 
   and constructor =
     | Constructor of {
         name : name;
         tt : t;
       }
+  [@@deriving show]
 
   and parameter =
     | Parameter of {
@@ -60,6 +65,7 @@ module Expr = struct
         icit : icit;
         tt : t;
       }
+  [@@deriving show]
 end
 
 module TopLevel = struct
@@ -75,6 +81,7 @@ module TopLevel = struct
         name : string Loc.t;
         arguments : string Loc.t list;
       }
+  [@@deriving show]
 end
 
 type program =
@@ -82,6 +89,7 @@ type program =
       hashbang : string Loc.t option;
       declarations : TopLevel.t list;
     }
+[@@deriving show]
 
 let e_app callee icit arg = Expr.App { callee; icit; arg }
 let e_let name value next = Expr.Let { name; value; next }

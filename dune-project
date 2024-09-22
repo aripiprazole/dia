@@ -8,11 +8,8 @@
  (github aripiprazole/dia))
 
 (authors "Gabrielle Guimarães de Oliveira")
-
 (maintainers "Gabrielle Guimarães de Oliveira")
-
 (license LICENSE)
-
 (documentation https://github.com/aripiprazole/dia)
 
 (package
@@ -20,7 +17,7 @@
  (synopsis "A cubical type theory theorem prover")
  (description
   "A thereom prover with HITs, homotopy features and cubical type theory")
- (depends ocaml dune)
+ (depends ocaml dune fmt ppx_deriving ppx_expect)
  (tags
   (topics "to describe" your project)))
 

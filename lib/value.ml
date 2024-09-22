@@ -6,12 +6,14 @@ type t =
   | Lam of Symbol.t * Syntax.icit * closure
   | Pi of Symbol.t * Syntax.icit * t * closure
   | U
+[@@deriving show]
 
 and closure =
   | Closure of {
       env : t list;
       expr : Term.t;
     }
+[@@deriving show]
 
 and spine = (t * Syntax.icit) list
 
