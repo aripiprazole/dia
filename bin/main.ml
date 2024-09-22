@@ -16,16 +16,21 @@ let speclist =
 let usage = "Dia: a dependently typed lambda"
 let () = Arg.parse speclist (fun filename -> input_file := filename) usage
 
+let read_lines name : string list =
+  let ic = open_in name in
+  let try_read () =
+    try Some (input_line ic) with
+    | End_of_file -> None
+  in
+  let rec loop acc =
+    match try_read () with
+    | Some s -> loop (s :: acc)
+    | None ->
+        close_in ic;
+        List.rev acc
+  in
+  loop []
+
 let () =
-  try
-    let lexbuf = open_in !input_file |> Lexing.from_channel in
-    let ip = Parser.Incremental.file lexbuf.lex_curr_p in
-    let _ = Parse_dia.parse lexbuf ip in
-    print_endline "Successfully parsed input"
-  with
-  | Parse_dia.Syntax_error (Some (line, column), msg) ->
-      Printf.eprintf "Syntax error at line %d, column %d: %s\n" line column msg;
-      exit 1
-  | exn ->
-      Printf.eprintf "An error occurred: %s\n" (Printexc.to_string exn);
-      exit 1
+  let _ = Parse_dia.parse_file (String.concat "\n" (read_lines !input_file)) in
+  ()

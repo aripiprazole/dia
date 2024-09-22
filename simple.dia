@@ -1,8 +1,4 @@
-let Nat := inductive
-| zero : Nat
-| succ : (pred : Nat) -> Nat
-
 let add (a b : Nat) : Nat :=
   match a with
-  | zero => b
+  | zero        => b
   | (succ pred) => succ (add pred b)

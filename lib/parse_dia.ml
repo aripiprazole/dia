@@ -1,4 +1,5 @@
 open Lexing
+open! Core
 module I = Parser.MenhirInterpreter
 
 exception Syntax_error of ((int * int) option * string)
@@ -34,3 +35,33 @@ let rec parse lexbuf checkpoint =
   | I.Accepted v -> v
   | I.Rejected ->
       raise (Syntax_error (None, "invalid syntax (parser rejected the input)"))
+
+let parse_file text =
+  try
+    let lexbuf = Lexing.from_string text in
+    let ip = Parser.Incremental.file lexbuf.lex_curr_p in
+    Ok (parse lexbuf ip)
+  with
+  | Syntax_error (Some (line, column), msg) ->
+      Printf.eprintf "Syntax error at line %d, column %d: %s\n" line column msg;
+      Error msg
+  | exn ->
+      Printf.eprintf "An error occurred: %s\n" (Printexc.to_string exn);
+      Error "Exception thrown"
+
+let parse_golden_test code =
+  print_endline
+    (match parse_file code with
+    | Ok v -> Syntax.show_program v
+    | Error err -> err)
+
+let%expect_test "parse inductive naturals" =
+  parse_golden_test
+    {| let Nat = inductive
+       | zero : Nat
+       | succ : (pred : Nat) -> Nat |};
+  [%expect
+    {|
+    <YOUR SYNTAX ERROR MESSAGE HERE> : 7
+
+    Syntax error at line 1, column 10: <YOUR SYNTAX ERROR MESSAGE HERE> : 7 |}]
