@@ -12,13 +12,11 @@
 %token RIGHT_PARENS (* ) *)
 %token LEFT_BRACES (* { *)
 %token RIGHT_BRACES (* } *)
-%token DOT (* . *)
 %token ARROW (* -> *)
 %token DOUBLE_ARROW (* => *)
 %token MATCH (* match *)
 %token WITH (* with *)
 %token IN (* in *)
-%token EQUALS (* = *)
 %token DEF_EQUALS (* := *)
 %token COLON (* : *)
 %token LET (* let *)
@@ -26,8 +24,6 @@
 %token PRAGMA (* #pragma *)
 %token BAR (* | *)
 %token FUN (* fun *)
-%token INDUCTIVE (* inductive *)
-%token COMMA (* , *)
 
 %token EOF
 
@@ -40,7 +36,7 @@ let infix_symbol := name = INFIX_ID; { Symbol.make name }
 
 let expr :=
   | FUN; ps = nonempty_list(symbol); ARROW; e = expr; { e_lam ps e }
-  | MATCH; scrutinee = expr; WITH; option(BAR); cases = separated_list(BAR, case); { e_match scrutinee cases }
+  | MATCH; scrutinee = expr; WITH; cases = list(case); { e_match scrutinee cases }
   | LET; name = symbol; DEF_EQUALS; value = expr; IN; body = expr; { e_let name value body }
   | e_pi
   | e_infix
@@ -63,6 +59,8 @@ let type_repr := COLON; tt = tt; { tt }
 let decl :=
   | LET; name = def_name; parameters = list(parameter); tt = option(type_repr); DEF_EQUALS; value = expr;
     { T_let_decl { name; parameters; tt = Option.value ~default:E_hole tt; value } }
+  | TYPE; name = def_name; parameters = list(parameter); tt = option(type_repr); DEF_EQUALS; constructors = list(constructor);
+    { T_type_decl { name; parameters; tt = Option.value ~default:E_hole tt; constructors } }
 
 let case := BAR; p = pattern; DOUBLE_ARROW; e = primary; { (p, e) }
 
@@ -79,11 +77,11 @@ let e_infix := lhs = primary; op = infix_symbol; rhs = primary; { curry (E_var o
 
 let e_pi :=
   | e_app
-  | d = e_pi; ARROW; c = primary; { e_pi d c }
+  | d = e_app; ARROW; c = e_pi; { e_pi d c }
 
 let tt := e_pi | e_infix
 
 let primary :=
-  | n = NUMBER; { Expr.E_num n }
-  | name = symbol; { Expr.E_var name }
+  | n = NUMBER; { E_num n }
+  | name = symbol; { E_var name }
   | LEFT_PARENS; expr = expr; RIGHT_PARENS; { expr }

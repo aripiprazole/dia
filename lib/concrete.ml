@@ -84,7 +84,7 @@ module Top_level = struct
   and constructor =
     | Constructor of {
         name : name;
-        tt : t;
+        tt : Expr.t;
       }
   [@@deriving show]
 end

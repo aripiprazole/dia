@@ -91,7 +91,7 @@ module Top_level : sig
   and constructor =
     | Constructor of {
         name : name;
-        tt : t;
+        tt : Expr.t;
       }
 
   val pp : Format.formatter -> t -> unit

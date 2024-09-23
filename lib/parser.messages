@@ -10,14 +10,14 @@ file: WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET WITH
+file: TYPE WITH
 ##
 ## Ends in an error in state: 1.
 ##
-## decl -> LET . def_name list(parameter) option(type_repr) DEF_EQUALS expr [ LET EOF ]
+## decl -> TYPE . def_name list(parameter) option(type_repr) DEF_EQUALS list(constructor) [ TYPE LET EOF ]
 ##
 ## The known suffix of the stack is as follows:
-## LET
+## TYPE
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -46,14 +46,14 @@ file: LET LEFT_PARENS ID WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID WITH
+file: TYPE ID WITH
 ##
 ## Ends in an error in state: 7.
 ##
-## decl -> LET def_name . list(parameter) option(type_repr) DEF_EQUALS expr [ LET EOF ]
+## decl -> TYPE def_name . list(parameter) option(type_repr) DEF_EQUALS list(constructor) [ TYPE LET EOF ]
 ##
 ## The known suffix of the stack is as follows:
-## LET def_name
+## TYPE def_name
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
@@ -105,7 +105,7 @@ file: LET ID COLON WITH
 ##
 ## Ends in an error in state: 12.
 ##
-## type_repr -> COLON . tt [ RIGHT_PARENS RIGHT_BRACES DEF_EQUALS ]
+## type_repr -> COLON . tt [ TYPE RIGHT_PARENS RIGHT_BRACES LET EOF DEF_EQUALS BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## COLON
@@ -117,7 +117,7 @@ file: LET ID COLON LEFT_PARENS WITH
 ##
 ## Ends in an error in state: 14.
 ##
-## primary -> LEFT_PARENS . expr RIGHT_PARENS [ WITH RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES INFIX_ID IN ID EOF DEF_EQUALS BAR ARROW ]
+## primary -> LEFT_PARENS . expr RIGHT_PARENS [ WITH TYPE RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES INFIX_ID IN ID EOF DEF_EQUALS BAR ARROW ]
 ##
 ## The known suffix of the stack is as follows:
 ## LEFT_PARENS
@@ -129,7 +129,7 @@ file: LET ID DEF_EQUALS MATCH WITH
 ##
 ## Ends in an error in state: 15.
 ##
-## expr -> MATCH . expr WITH option(BAR) loption(separated_nonempty_list(BAR,case)) [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## expr -> MATCH . expr WITH list(case) [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## MATCH
@@ -141,7 +141,7 @@ file: LET ID DEF_EQUALS LET WITH
 ##
 ## Ends in an error in state: 16.
 ##
-## expr -> LET . symbol DEF_EQUALS expr IN expr [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## expr -> LET . symbol DEF_EQUALS expr IN expr [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## LET
@@ -153,7 +153,7 @@ file: LET ID DEF_EQUALS LET ID WITH
 ##
 ## Ends in an error in state: 17.
 ##
-## expr -> LET symbol . DEF_EQUALS expr IN expr [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## expr -> LET symbol . DEF_EQUALS expr IN expr [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## LET symbol
@@ -165,7 +165,7 @@ file: LET ID DEF_EQUALS LET ID DEF_EQUALS WITH
 ##
 ## Ends in an error in state: 18.
 ##
-## expr -> LET symbol DEF_EQUALS . expr IN expr [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## expr -> LET symbol DEF_EQUALS . expr IN expr [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## LET symbol DEF_EQUALS
@@ -177,7 +177,7 @@ file: LET ID DEF_EQUALS FUN WITH
 ##
 ## Ends in an error in state: 19.
 ##
-## expr -> FUN . nonempty_list(symbol) ARROW expr [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## expr -> FUN . nonempty_list(symbol) ARROW expr [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## FUN
@@ -189,7 +189,7 @@ file: LET ID DEF_EQUALS FUN ID RIGHT_PARENS
 ##
 ## Ends in an error in state: 20.
 ##
-## expr -> FUN nonempty_list(symbol) . ARROW expr [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## expr -> FUN nonempty_list(symbol) . ARROW expr [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## FUN nonempty_list(symbol)
@@ -207,7 +207,7 @@ file: LET ID DEF_EQUALS FUN ID ARROW WITH
 ##
 ## Ends in an error in state: 21.
 ##
-## expr -> FUN nonempty_list(symbol) ARROW . expr [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## expr -> FUN nonempty_list(symbol) ARROW . expr [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## FUN nonempty_list(symbol) ARROW
@@ -215,12 +215,12 @@ file: LET ID DEF_EQUALS FUN ID ARROW WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID COLON ID TYPE
+file: LET ID COLON ID PRAGMA
 ##
 ## Ends in an error in state: 23.
 ##
-## e_app -> primary . [ WITH RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES IN ID EOF DEF_EQUALS ARROW ]
-## e_infix -> primary . infix_symbol primary [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF DEF_EQUALS ]
+## e_app -> primary . [ WITH TYPE RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES IN ID EOF DEF_EQUALS BAR ARROW ]
+## e_infix -> primary . infix_symbol primary [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF DEF_EQUALS BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## primary
@@ -232,7 +232,7 @@ file: LET ID COLON ID INFIX_ID WITH
 ##
 ## Ends in an error in state: 25.
 ##
-## e_infix -> primary infix_symbol . primary [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF DEF_EQUALS ]
+## e_infix -> primary infix_symbol . primary [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF DEF_EQUALS BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## primary infix_symbol
@@ -240,45 +240,14 @@ file: LET ID COLON ID INFIX_ID WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS ID DEF_EQUALS
+file: LET ID COLON ID ID PRAGMA
 ##
-## Ends in an error in state: 28.
+## Ends in an error in state: 30.
 ##
-## e_pi -> e_pi . ARROW primary [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ARROW ]
-## expr -> e_pi . [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
-##
-## The known suffix of the stack is as follows:
-## e_pi
-##
-## WARNING: This example involves spurious reductions.
-## This implies that, although the LR(1) items shown above provide an
-## accurate view of the past (what has been recognized so far), they
-## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 23, spurious reduction of production e_app -> primary
-## In state 32, spurious reduction of production e_pi -> e_app
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: LET ID COLON ID ARROW WITH
-##
-## Ends in an error in state: 29.
-##
-## e_pi -> e_pi ARROW . primary [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF DEF_EQUALS ARROW ]
-##
-## The known suffix of the stack is as follows:
-## e_pi ARROW
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: LET ID COLON ID ID TYPE
-##
-## Ends in an error in state: 32.
-##
-## e_app -> e_app . primary [ WITH RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES IN ID EOF DEF_EQUALS ARROW ]
-## e_app -> e_app . LEFT_BRACES expr RIGHT_BRACES [ WITH RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES IN ID EOF DEF_EQUALS ARROW ]
-## e_pi -> e_app . [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF DEF_EQUALS ARROW ]
+## e_app -> e_app . primary [ WITH TYPE RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES IN ID EOF DEF_EQUALS BAR ARROW ]
+## e_app -> e_app . LEFT_BRACES expr RIGHT_BRACES [ WITH TYPE RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES IN ID EOF DEF_EQUALS BAR ARROW ]
+## e_pi -> e_app . [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF DEF_EQUALS BAR ]
+## e_pi -> e_app . ARROW e_pi [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF DEF_EQUALS BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## e_app
@@ -288,9 +257,9 @@ file: LET ID COLON ID ID TYPE
 
 file: LET ID COLON ID LEFT_BRACES WITH
 ##
-## Ends in an error in state: 33.
+## Ends in an error in state: 31.
 ##
-## e_app -> e_app LEFT_BRACES . expr RIGHT_BRACES [ WITH RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES IN ID EOF DEF_EQUALS ARROW ]
+## e_app -> e_app LEFT_BRACES . expr RIGHT_BRACES [ WITH TYPE RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES IN ID EOF DEF_EQUALS BAR ARROW ]
 ##
 ## The known suffix of the stack is as follows:
 ## e_app LEFT_BRACES
@@ -298,11 +267,11 @@ file: LET ID COLON ID LEFT_BRACES WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID COLON ID LEFT_BRACES ID WITH
+file: LET ID COLON ID LEFT_BRACES ID DEF_EQUALS
 ##
-## Ends in an error in state: 34.
+## Ends in an error in state: 32.
 ##
-## e_app -> e_app LEFT_BRACES expr . RIGHT_BRACES [ WITH RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES IN ID EOF DEF_EQUALS ARROW ]
+## e_app -> e_app LEFT_BRACES expr . RIGHT_BRACES [ WITH TYPE RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES IN ID EOF DEF_EQUALS BAR ARROW ]
 ##
 ## The known suffix of the stack is as follows:
 ## e_app LEFT_BRACES expr
@@ -312,17 +281,29 @@ file: LET ID COLON ID LEFT_BRACES ID WITH
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 23, spurious reduction of production e_app -> primary
-## In state 32, spurious reduction of production e_pi -> e_app
+## In state 30, spurious reduction of production e_pi -> e_app
 ## In state 28, spurious reduction of production expr -> e_pi
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS LET ID DEF_EQUALS ID WITH
+file: LET ID COLON ID ARROW WITH
 ##
-## Ends in an error in state: 37.
+## Ends in an error in state: 34.
 ##
-## expr -> LET symbol DEF_EQUALS expr . IN expr [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## e_pi -> e_app ARROW . e_pi [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF DEF_EQUALS BAR ]
+##
+## The known suffix of the stack is as follows:
+## e_app ARROW
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: LET ID DEF_EQUALS LET ID DEF_EQUALS ID DEF_EQUALS
+##
+## Ends in an error in state: 38.
+##
+## expr -> LET symbol DEF_EQUALS expr . IN expr [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## LET symbol DEF_EQUALS expr
@@ -332,7 +313,7 @@ file: LET ID DEF_EQUALS LET ID DEF_EQUALS ID WITH
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 23, spurious reduction of production e_app -> primary
-## In state 32, spurious reduction of production e_pi -> e_app
+## In state 30, spurious reduction of production e_pi -> e_app
 ## In state 28, spurious reduction of production expr -> e_pi
 ##
 
@@ -340,9 +321,9 @@ file: LET ID DEF_EQUALS LET ID DEF_EQUALS ID WITH
 
 file: LET ID DEF_EQUALS LET ID DEF_EQUALS ID IN WITH
 ##
-## Ends in an error in state: 38.
+## Ends in an error in state: 39.
 ##
-## expr -> LET symbol DEF_EQUALS expr IN . expr [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## expr -> LET symbol DEF_EQUALS expr IN . expr [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## LET symbol DEF_EQUALS expr IN
@@ -350,11 +331,11 @@ file: LET ID DEF_EQUALS LET ID DEF_EQUALS ID IN WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS MATCH ID RIGHT_PARENS
+file: LET ID DEF_EQUALS MATCH ID DEF_EQUALS
 ##
-## Ends in an error in state: 40.
+## Ends in an error in state: 41.
 ##
-## expr -> MATCH expr . WITH option(BAR) loption(separated_nonempty_list(BAR,case)) [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## expr -> MATCH expr . WITH list(case) [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## MATCH expr
@@ -364,17 +345,17 @@ file: LET ID DEF_EQUALS MATCH ID RIGHT_PARENS
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 23, spurious reduction of production e_app -> primary
-## In state 32, spurious reduction of production e_pi -> e_app
+## In state 30, spurious reduction of production e_pi -> e_app
 ## In state 28, spurious reduction of production expr -> e_pi
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS MATCH ID WITH TYPE
+file: LET ID DEF_EQUALS MATCH ID WITH PRAGMA
 ##
-## Ends in an error in state: 41.
+## Ends in an error in state: 42.
 ##
-## expr -> MATCH expr WITH . option(BAR) loption(separated_nonempty_list(BAR,case)) [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## expr -> MATCH expr WITH . list(case) [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## MATCH expr WITH
@@ -382,23 +363,11 @@ file: LET ID DEF_EQUALS MATCH ID WITH TYPE
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS MATCH ID WITH BAR TYPE
+file: LET ID DEF_EQUALS MATCH ID WITH BAR WITH
 ##
 ## Ends in an error in state: 43.
 ##
-## expr -> MATCH expr WITH option(BAR) . loption(separated_nonempty_list(BAR,case)) [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
-##
-## The known suffix of the stack is as follows:
-## MATCH expr WITH option(BAR)
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR WITH
-##
-## Ends in an error in state: 44.
-##
-## case -> BAR . pattern DOUBLE_ARROW primary [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF BAR ]
+## case -> BAR . pattern DOUBLE_ARROW primary [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## BAR
@@ -406,9 +375,9 @@ file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR LEFT_PARENS WITH
+file: LET ID DEF_EQUALS MATCH ID WITH BAR LEFT_PARENS WITH
 ##
-## Ends in an error in state: 45.
+## Ends in an error in state: 44.
 ##
 ## pattern -> LEFT_PARENS . def_name list(pattern) RIGHT_PARENS [ RIGHT_PARENS LEFT_PARENS ID DOUBLE_ARROW ]
 ##
@@ -418,9 +387,9 @@ file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR LEFT_PARENS WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR LEFT_PARENS ID WITH
+file: LET ID DEF_EQUALS MATCH ID WITH BAR LEFT_PARENS ID WITH
 ##
-## Ends in an error in state: 46.
+## Ends in an error in state: 45.
 ##
 ## pattern -> LEFT_PARENS def_name . list(pattern) RIGHT_PARENS [ RIGHT_PARENS LEFT_PARENS ID DOUBLE_ARROW ]
 ##
@@ -430,9 +399,9 @@ file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR LEFT_PARENS ID WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR LEFT_PARENS ID ID WITH
+file: LET ID DEF_EQUALS MATCH ID WITH BAR LEFT_PARENS ID ID WITH
 ##
-## Ends in an error in state: 48.
+## Ends in an error in state: 47.
 ##
 ## list(pattern) -> pattern . list(pattern) [ RIGHT_PARENS ]
 ##
@@ -442,11 +411,11 @@ file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR LEFT_PARENS ID ID WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR ID WITH
+file: LET ID DEF_EQUALS MATCH ID WITH BAR ID WITH
 ##
-## Ends in an error in state: 52.
+## Ends in an error in state: 51.
 ##
-## case -> BAR pattern . DOUBLE_ARROW primary [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF BAR ]
+## case -> BAR pattern . DOUBLE_ARROW primary [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## BAR pattern
@@ -454,11 +423,11 @@ file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR ID WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR ID DOUBLE_ARROW WITH
+file: LET ID DEF_EQUALS MATCH ID WITH BAR ID DOUBLE_ARROW WITH
 ##
-## Ends in an error in state: 53.
+## Ends in an error in state: 52.
 ##
-## case -> BAR pattern DOUBLE_ARROW . primary [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF BAR ]
+## case -> BAR pattern DOUBLE_ARROW . primary [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## BAR pattern DOUBLE_ARROW
@@ -466,12 +435,11 @@ file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR ID DOUBLE_ARROW WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR ID DOUBLE_ARROW ID TYPE
+file: LET ID DEF_EQUALS MATCH ID WITH BAR ID DOUBLE_ARROW ID PRAGMA
 ##
-## Ends in an error in state: 57.
+## Ends in an error in state: 55.
 ##
-## separated_nonempty_list(BAR,case) -> case . [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
-## separated_nonempty_list(BAR,case) -> case . BAR separated_nonempty_list(BAR,case) [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
+## list(case) -> case . list(case) [ WITH TYPE RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## case
@@ -479,23 +447,11 @@ file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR ID DOUBLE_ARROW ID TYPE
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS MATCH ID WITH BAR BAR ID DOUBLE_ARROW ID BAR WITH
+file: LET ID COLON LEFT_PARENS ID DEF_EQUALS
 ##
-## Ends in an error in state: 58.
+## Ends in an error in state: 57.
 ##
-## separated_nonempty_list(BAR,case) -> case BAR . separated_nonempty_list(BAR,case) [ WITH RIGHT_PARENS RIGHT_BRACES LET IN EOF ]
-##
-## The known suffix of the stack is as follows:
-## case BAR
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: LET ID COLON LEFT_PARENS ID WITH
-##
-## Ends in an error in state: 60.
-##
-## primary -> LEFT_PARENS expr . RIGHT_PARENS [ WITH RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES INFIX_ID IN ID EOF DEF_EQUALS BAR ARROW ]
+## primary -> LEFT_PARENS expr . RIGHT_PARENS [ WITH TYPE RIGHT_PARENS RIGHT_BRACES NUMBER LET LEFT_PARENS LEFT_BRACES INFIX_ID IN ID EOF DEF_EQUALS BAR ARROW ]
 ##
 ## The known suffix of the stack is as follows:
 ## LEFT_PARENS expr
@@ -505,35 +461,15 @@ file: LET ID COLON LEFT_PARENS ID WITH
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 23, spurious reduction of production e_app -> primary
-## In state 32, spurious reduction of production e_pi -> e_app
+## In state 30, spurious reduction of production e_pi -> e_app
 ## In state 28, spurious reduction of production expr -> e_pi
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID COLON ID WITH
+file: LET ID LEFT_PARENS ID COLON ID WITH
 ##
 ## Ends in an error in state: 63.
-##
-## e_pi -> e_pi . ARROW primary [ RIGHT_PARENS RIGHT_BRACES DEF_EQUALS ARROW ]
-## tt -> e_pi . [ RIGHT_PARENS RIGHT_BRACES DEF_EQUALS ]
-##
-## The known suffix of the stack is as follows:
-## e_pi
-##
-## WARNING: This example involves spurious reductions.
-## This implies that, although the LR(1) items shown above provide an
-## accurate view of the past (what has been recognized so far), they
-## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 23, spurious reduction of production e_app -> primary
-## In state 32, spurious reduction of production e_pi -> e_app
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: LET ID LEFT_PARENS ID COLON ID RIGHT_BRACES
-##
-## Ends in an error in state: 66.
 ##
 ## parameter -> LEFT_PARENS nonempty_list(symbol) option(type_repr) . RIGHT_PARENS [ LEFT_PARENS LEFT_BRACES DEF_EQUALS COLON ]
 ##
@@ -545,17 +481,17 @@ file: LET ID LEFT_PARENS ID COLON ID RIGHT_BRACES
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 23, spurious reduction of production e_app -> primary
-## In state 32, spurious reduction of production e_pi -> e_app
-## In state 63, spurious reduction of production tt -> e_pi
-## In state 62, spurious reduction of production type_repr -> COLON tt
-## In state 65, spurious reduction of production option(type_repr) -> type_repr
+## In state 30, spurious reduction of production e_pi -> e_app
+## In state 60, spurious reduction of production tt -> e_pi
+## In state 59, spurious reduction of production type_repr -> COLON tt
+## In state 62, spurious reduction of production option(type_repr) -> type_repr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: LET ID LEFT_BRACES WITH
 ##
-## Ends in an error in state: 68.
+## Ends in an error in state: 65.
 ##
 ## parameter -> LEFT_BRACES . nonempty_list(symbol) option(type_repr) RIGHT_BRACES [ LEFT_PARENS LEFT_BRACES DEF_EQUALS COLON ]
 ##
@@ -567,7 +503,7 @@ file: LET ID LEFT_BRACES WITH
 
 file: LET ID LEFT_BRACES ID RIGHT_PARENS
 ##
-## Ends in an error in state: 69.
+## Ends in an error in state: 66.
 ##
 ## parameter -> LEFT_BRACES nonempty_list(symbol) . option(type_repr) RIGHT_BRACES [ LEFT_PARENS LEFT_BRACES DEF_EQUALS COLON ]
 ##
@@ -583,9 +519,9 @@ file: LET ID LEFT_BRACES ID RIGHT_PARENS
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID LEFT_BRACES ID COLON ID RIGHT_PARENS
+file: LET ID LEFT_BRACES ID COLON ID WITH
 ##
-## Ends in an error in state: 70.
+## Ends in an error in state: 67.
 ##
 ## parameter -> LEFT_BRACES nonempty_list(symbol) option(type_repr) . RIGHT_BRACES [ LEFT_PARENS LEFT_BRACES DEF_EQUALS COLON ]
 ##
@@ -597,17 +533,17 @@ file: LET ID LEFT_BRACES ID COLON ID RIGHT_PARENS
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 23, spurious reduction of production e_app -> primary
-## In state 32, spurious reduction of production e_pi -> e_app
-## In state 63, spurious reduction of production tt -> e_pi
-## In state 62, spurious reduction of production type_repr -> COLON tt
-## In state 65, spurious reduction of production option(type_repr) -> type_repr
+## In state 30, spurious reduction of production e_pi -> e_app
+## In state 60, spurious reduction of production tt -> e_pi
+## In state 59, spurious reduction of production type_repr -> COLON tt
+## In state 62, spurious reduction of production option(type_repr) -> type_repr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: LET ID LEFT_BRACES ID RIGHT_BRACES WITH
 ##
-## Ends in an error in state: 72.
+## Ends in an error in state: 69.
 ##
 ## list(parameter) -> parameter . list(parameter) [ DEF_EQUALS COLON ]
 ##
@@ -617,11 +553,115 @@ file: LET ID LEFT_BRACES ID RIGHT_BRACES WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID COLON ID RIGHT_PARENS
+file: TYPE ID COLON ID WITH
+##
+## Ends in an error in state: 72.
+##
+## decl -> TYPE def_name list(parameter) option(type_repr) . DEF_EQUALS list(constructor) [ TYPE LET EOF ]
+##
+## The known suffix of the stack is as follows:
+## TYPE def_name list(parameter) option(type_repr)
+##
+## WARNING: This example involves spurious reductions.
+## This implies that, although the LR(1) items shown above provide an
+## accurate view of the past (what has been recognized so far), they
+## may provide an INCOMPLETE view of the future (what was expected next).
+## In state 23, spurious reduction of production e_app -> primary
+## In state 30, spurious reduction of production e_pi -> e_app
+## In state 60, spurious reduction of production tt -> e_pi
+## In state 59, spurious reduction of production type_repr -> COLON tt
+## In state 62, spurious reduction of production option(type_repr) -> type_repr
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: TYPE ID DEF_EQUALS WITH
+##
+## Ends in an error in state: 73.
+##
+## decl -> TYPE def_name list(parameter) option(type_repr) DEF_EQUALS . list(constructor) [ TYPE LET EOF ]
+##
+## The known suffix of the stack is as follows:
+## TYPE def_name list(parameter) option(type_repr) DEF_EQUALS
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: TYPE ID DEF_EQUALS BAR WITH
+##
+## Ends in an error in state: 74.
+##
+## constructor -> BAR . def_name type_repr [ TYPE LET EOF BAR ]
+##
+## The known suffix of the stack is as follows:
+## BAR
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: TYPE ID DEF_EQUALS BAR ID WITH
 ##
 ## Ends in an error in state: 75.
 ##
-## decl -> LET def_name list(parameter) option(type_repr) . DEF_EQUALS expr [ LET EOF ]
+## constructor -> BAR def_name . type_repr [ TYPE LET EOF BAR ]
+##
+## The known suffix of the stack is as follows:
+## BAR def_name
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: TYPE ID DEF_EQUALS BAR ID COLON ID WITH
+##
+## Ends in an error in state: 78.
+##
+## list(constructor) -> constructor . list(constructor) [ TYPE LET EOF ]
+##
+## The known suffix of the stack is as follows:
+## constructor
+##
+## WARNING: This example involves spurious reductions.
+## This implies that, although the LR(1) items shown above provide an
+## accurate view of the past (what has been recognized so far), they
+## may provide an INCOMPLETE view of the future (what was expected next).
+## In state 23, spurious reduction of production e_app -> primary
+## In state 30, spurious reduction of production e_pi -> e_app
+## In state 60, spurious reduction of production tt -> e_pi
+## In state 59, spurious reduction of production type_repr -> COLON tt
+## In state 76, spurious reduction of production constructor -> BAR def_name type_repr
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: LET WITH
+##
+## Ends in an error in state: 80.
+##
+## decl -> LET . def_name list(parameter) option(type_repr) DEF_EQUALS expr [ TYPE LET EOF ]
+##
+## The known suffix of the stack is as follows:
+## LET
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: LET ID WITH
+##
+## Ends in an error in state: 81.
+##
+## decl -> LET def_name . list(parameter) option(type_repr) DEF_EQUALS expr [ TYPE LET EOF ]
+##
+## The known suffix of the stack is as follows:
+## LET def_name
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: LET ID COLON ID WITH
+##
+## Ends in an error in state: 83.
+##
+## decl -> LET def_name list(parameter) option(type_repr) . DEF_EQUALS expr [ TYPE LET EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## LET def_name list(parameter) option(type_repr)
@@ -631,19 +671,19 @@ file: LET ID COLON ID RIGHT_PARENS
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 23, spurious reduction of production e_app -> primary
-## In state 32, spurious reduction of production e_pi -> e_app
-## In state 63, spurious reduction of production tt -> e_pi
-## In state 62, spurious reduction of production type_repr -> COLON tt
-## In state 65, spurious reduction of production option(type_repr) -> type_repr
+## In state 30, spurious reduction of production e_pi -> e_app
+## In state 60, spurious reduction of production tt -> e_pi
+## In state 59, spurious reduction of production type_repr -> COLON tt
+## In state 62, spurious reduction of production option(type_repr) -> type_repr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: LET ID DEF_EQUALS WITH
 ##
-## Ends in an error in state: 76.
+## Ends in an error in state: 84.
 ##
-## decl -> LET def_name list(parameter) option(type_repr) DEF_EQUALS . expr [ LET EOF ]
+## decl -> LET def_name list(parameter) option(type_repr) DEF_EQUALS . expr [ TYPE LET EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## LET def_name list(parameter) option(type_repr) DEF_EQUALS
@@ -651,9 +691,9 @@ file: LET ID DEF_EQUALS WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID DEF_EQUALS ID WITH
+file: LET ID DEF_EQUALS ID DEF_EQUALS
 ##
-## Ends in an error in state: 81.
+## Ends in an error in state: 89.
 ##
 ## list(decl) -> decl . list(decl) [ EOF ]
 ##
@@ -665,9 +705,9 @@ file: LET ID DEF_EQUALS ID WITH
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 23, spurious reduction of production e_app -> primary
-## In state 32, spurious reduction of production e_pi -> e_app
+## In state 30, spurious reduction of production e_pi -> e_app
 ## In state 28, spurious reduction of production expr -> e_pi
-## In state 77, spurious reduction of production decl -> LET def_name list(parameter) option(type_repr) DEF_EQUALS expr
+## In state 85, spurious reduction of production decl -> LET def_name list(parameter) option(type_repr) DEF_EQUALS expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>

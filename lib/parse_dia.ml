@@ -1,12 +1,13 @@
 open Lexing
+open Sedlexing.Utf8
 module I = Parser.MenhirInterpreter
 
 exception Syntax_error of ((int * int) option * string)
 
 let get_lexing_position lexbuf =
-  let p = Lexing.lexeme_start_p lexbuf in
-  let line_number = p.Lexing.pos_lnum in
-  let column = p.Lexing.pos_cnum - p.Lexing.pos_bol + 1 in
+  let p, _ = Sedlexing.lexing_positions lexbuf in
+  let line_number = p.pos_lnum in
+  let column = p.pos_cnum - p.pos_bol + 1 in
   (line_number, column)
 
 let get_parse_error env =
@@ -20,7 +21,7 @@ let rec parse lexbuf checkpoint =
   match checkpoint with
   | I.InputNeeded _ ->
       let token = Lexer.token lexbuf in
-      let startp = lexbuf.lex_start_p and endp = lexbuf.lex_curr_p in
+      let startp, endp = Sedlexing.lexing_positions lexbuf in
       let checkpoint = I.offer checkpoint (token, startp, endp) in
       parse lexbuf checkpoint
   | I.Shifting _
@@ -37,8 +38,9 @@ let rec parse lexbuf checkpoint =
 
 let parse_file text =
   try
-    let lexbuf = Lexing.from_string text in
-    let ip = Parser.Incremental.file lexbuf.lex_curr_p in
+    let lexbuf = from_string text in
+    let startp, _ = Sedlexing.lexing_positions lexbuf in
+    let ip = Parser.Incremental.file startp in
     Ok (parse lexbuf ip)
   with
   | Syntax_error (Some (line, column), msg) ->
