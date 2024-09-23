@@ -5,18 +5,10 @@ type icit =
 val pp_icit : Format.formatter -> icit -> unit
 val show_icit : icit -> string
 
-type name =
-  | Prefix of Symbol.t
-  | Infix of Symbol.t
-  | Postfix of Symbol.t
-
-val pp_name : Format.formatter -> name -> unit
-val show_name : name -> string
-
 module Pattern : sig
   type t =
     | P_constructor of {
-        name : name;
+        name : Symbol.t;
         args : t list;
       }
     | P_var of Symbol.t
@@ -30,7 +22,7 @@ module Expr : sig
     | E_u
     | E_hole
     | E_num of int
-    | E_src_pos of t Loc.t
+    | E_src_pos of t * Loc.t
     | E_var of Symbol.t
     | E_lam of {
         params : Symbol.t list;
@@ -70,27 +62,27 @@ end
 
 module Top_level : sig
   type t =
-    | T_src_pos of t Loc.t
+    | T_src_pos of t * Loc.t
     | T_let_decl of {
-        name : name;
+        name : Symbol.t;
         parameters : Expr.parameter list;
         tt : Expr.t;
         value : Expr.t;
       }
     | T_type_decl of {
-        name : name;
+        name : Symbol.t;
         parameters : Expr.parameter list;
         tt : Expr.t;
         constructors : constructor list;
       }
     | T_pragma of {
-        name : string Loc.t;
-        arguments : string Loc.t list;
+        name : Symbol.t;
+        arguments : Symbol.t list;
       }
 
   and constructor =
     | Constructor of {
-        name : name;
+        name : Symbol.t;
         tt : Expr.t;
       }
 
@@ -102,7 +94,7 @@ end
 
 type program =
   | Program of {
-      hashbang : string Loc.t option;
+      hashbang : Symbol.t option;
       declarations : Top_level.t list;
     }
 

@@ -6,7 +6,7 @@ let icit_to_pi_prefix = function
 | Concrete.Expl -> "∀"
 
 let rec pprint prec ns = function
-| T_src_pos { value; _ } -> pprint prec ns value
+| T_src_pos (value, _) -> pprint prec ns value
 | T_lam (_, _, cod) as l ->
     let params = lam_dom l |> List.map pp_lam_param |> String.concat " " in
     let cod = Option.value (lam_cod l) ~default:cod in
@@ -30,17 +30,18 @@ let rec pprint prec ns = function
 | _ -> assert false
 
 and pp_pi_param prec ns = function
-| Dom { name = Some name; icit = Concrete.Expl; dom } ->
-    sprintf "(%s : %s)" (Loc.unwrap name) (pprint prec ns dom)
-| Dom { name = Some name; icit = Concrete.Impl; dom } ->
-    sprintf "{%s : %s}" (Loc.unwrap name) (pprint prec ns dom)
-| Dom { name = None; icit = Concrete.Expl; dom } ->
-    sprintf "%s" (pprint prec ns dom)
-| Dom { name = None; icit = Concrete.Impl; dom } ->
-    sprintf "{%s}" (pprint prec ns dom)
+| Dom { name = S_symbol (k, _); icit = Concrete.Expl; dom } -> begin
+    match Symbol.name k with
+    | Some s -> sprintf "(%s : %s)" s (pprint prec ns dom)
+    | None -> sprintf "%s" (pprint prec ns dom)
+  end
+| Dom { name = S_symbol (k, _); icit = Concrete.Impl; dom } -> begin
+    match Symbol.name k with
+    | Some s -> sprintf "{%s : %s}" s (pprint prec ns dom)
+    | None -> sprintf "{%s}" (pprint prec ns dom)
+  end
 
 and pp_lam_param = function
-| Some name, Concrete.Expl -> sprintf "%s" (Loc.unwrap name)
-| Some name, Concrete.Impl -> sprintf "{%s}" (Loc.unwrap name)
-| None, Concrete.Expl -> "_"
-| None, Concrete.Impl -> "{_}"
+| S_symbol (k, _), Concrete.Expl -> Option.value (Symbol.name k) ~default:"_"
+| S_symbol (k, _), Concrete.Impl ->
+    "{" ^ Option.value (Symbol.name k) ~default:"_" ^ "}"

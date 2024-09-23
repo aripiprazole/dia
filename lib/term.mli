@@ -1,5 +1,5 @@
 type parameter = {
-  name : string Loc.t;
+  name : Symbol.t;
   icit : Concrete.icit;
 }
 
@@ -20,7 +20,7 @@ val show_meta_var : meta_var -> string
 
 type t =
   | T_u
-  | T_src_pos of t Loc.t
+  | T_src_pos of t * Loc.t
   | T_bvar of Debruijin.idx
   | T_fvar of int
   | T_lam of Symbol.t * Concrete.icit * t

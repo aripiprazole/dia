@@ -1,17 +1,12 @@
 open Parser
+open Sedlexing.Utf8
 
 let digit = [%sedlex.regexp? '0' .. '9']
 let number = [%sedlex.regexp? Plus digit]
 let letter = [%sedlex.regexp? 'a' .. 'z' | 'A' .. 'Z']
 
-exception Eof
-
-let token buf =
+let rec token buf =
   match%sedlex buf with
-  | number -> NUMBER (int_of_string (Sedlexing.Latin1.lexeme buf))
-  | Plus (Chars "+-*/^=<>!&|~?%:") -> INFIX_ID (Sedlexing.Latin1.lexeme buf)
-  | letter, Star ('A' .. 'Z' | 'a' .. 'z' | digit) ->
-      ID (Sedlexing.Latin1.lexeme buf)
   | "type" -> TYPE
   | "let" -> LET
   | "match" -> MATCH
@@ -19,9 +14,15 @@ let token buf =
   | "fun" -> FUN
   | "->" -> ARROW
   | "=>" -> DOUBLE_ARROW
+  | ":=" -> DEF_EQUALS
+  | "|" -> BAR
   | '(' -> LEFT_PARENS
   | ')' -> RIGHT_PARENS
   | '{' -> LEFT_BRACES
   | '}' -> RIGHT_BRACES
-  | eof -> raise Eof
+  | Plus (Chars " \n\t") -> token buf
+  | number -> NUMBER (int_of_string (lexeme buf))
+  | Plus (Chars "+-*/^=<>!&|~?%:") -> INFIX_ID (lexeme buf)
+  | letter, Star (letter | digit) -> ID (lexeme buf)
+  | eof -> EOF
   | _ -> failwith @@ "Unexpected character: " ^ Sedlexing.Latin1.lexeme buf

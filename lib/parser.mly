@@ -3,6 +3,7 @@
   open Concrete.Top_level
   open Concrete.Expr
   open Concrete.Pattern
+  open Symbol
 %}
 
 %token <int> NUMBER
@@ -31,8 +32,8 @@
 
 %%
 
-let symbol := name = ID; { Symbol.make name }
-let infix_symbol := name = INFIX_ID; { Symbol.make name }
+let symbol := name = ID; { Symbol.make (K_prefix name) }
+let infix_symbol := name = INFIX_ID; { Symbol.make (K_infix name) }
 
 let expr :=
   | FUN; ps = nonempty_list(symbol); ARROW; e = expr; { e_lam ps e }
@@ -51,8 +52,8 @@ let parameter :=
   | LEFT_BRACES; names = nonempty_list(symbol); tt = option(type_repr); RIGHT_BRACES; { Parameter { names; tt = Option.value ~default:E_hole tt; icit = Impl } }
 
 let def_name :=
-  | name = symbol; { Prefix name }
-  | LEFT_PARENS; name = symbol; RIGHT_PARENS; { Infix name }
+  | name = symbol; { Symbol.map (fun s -> K_prefix s) name }
+  | LEFT_PARENS; name = symbol; RIGHT_PARENS; { Symbol.map (fun s -> K_infix s) name }
 
 let type_repr := COLON; tt = tt; { tt }
 

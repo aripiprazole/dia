@@ -6,7 +6,7 @@ val show_lvl : lvl -> string
 type idx =
   | Idx of {
       value : lvl;
-      name : string Loc.t;
+      name : Symbol.t;
     }
 
 val pp_idx : Format.formatter -> idx -> unit

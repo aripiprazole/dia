@@ -3,7 +3,7 @@ type origin =
   | Source
 
 type t = {
-  pos : Loc.pos;
+  pos : Loc.t;
   env : Value.t list;
   lvl : int;
   bounds : Term.bound list;

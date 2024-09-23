@@ -3,7 +3,7 @@ type origin =
   | Source
 
 type t = {
-  pos : Loc.pos; (* error handling *)
+  pos : Loc.t; (* error handling *)
   env : Value.t List.t; (* nbe *)
   lvl : Debruijin.lvl; (* unification *)
   bounds : Term.bound list; (* fresh meta creating *)

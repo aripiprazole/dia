@@ -3,7 +3,7 @@ open Value
 
 type eval_error =
   | EE_panic of string
-  | EE_fail_with_pos of Loc.pos * eval_error
+  | EE_fail_with_pos of Loc.t * eval_error
 
 exception Eval_error of eval_error
 
@@ -21,7 +21,7 @@ let apply_term icit tt arg =
 let rec eval env = function
 | T_u -> V_u
 | T_bvar (Debruijin.Idx { value; _ }) -> List.nth env value
-| T_src_pos { value; _ } -> eval env value
+| T_src_pos (value, _) -> eval env value
 | T_pi (Term.Dom { name; dom; icit }, cod) ->
     let dom = eval env dom in
     V_pi (name, icit, dom, Closure { env; expr = cod })

@@ -1,6 +1,7 @@
 open Aux
 open Term
 open Value
+open Symbol
 open Abstract.Expr
 module Ren = Map.Make (Int)
 
@@ -82,7 +83,9 @@ let solve gamma h sp rhs =
     sp (* Transforms into a implicitness list *)
     |> List.map snd (* Reverts the list *)
     |> List.rev (* Builds lambdas over lambdas *)
-    |> List.fold_left (fun acc next -> T_lam (None, next, acc)) rhs
+    |> List.fold_left
+         (fun acc next -> T_lam (Symbol.make K_hole, next, acc))
+         rhs
   in
   h <-- eval [] lams
 
@@ -129,7 +132,7 @@ let rec insert ctx = function
 
 let rec check ctx t expected =
   match (t, expected) with
-  | E_src_pos { pos; value }, type_repr ->
+  | E_src_pos (value, pos), type_repr ->
       check Ctx.{ ctx with pos } value type_repr
   | E_lam _, V_pi (_, _, _, _) -> assert false
   | E_hole _, _ -> fresh_meta ctx
@@ -141,7 +144,7 @@ let rec check ctx t expected =
 and infer ctx = function
 | E_u -> (T_u, V_u)
 | E_var _ -> assert false
-| E_src_pos { pos; value } -> infer { ctx with pos } value
+| E_src_pos (value, pos) -> infer { ctx with pos } value
 | E_lam _ -> assert false
 | E_app _ -> assert false
 | E_as (term, expected) -> begin

@@ -1,5 +1,5 @@
 type parameter = {
-  name : string Loc.t;
+  name : Symbol.t;
   icit : Concrete.icit;
 }
 [@@deriving show]
@@ -15,7 +15,7 @@ type meta_var = Meta_var of int [@@deriving show]
    substitutions for better error messages as [`Let`] *)
 type t =
   | T_u
-  | T_src_pos of t Loc.t
+  | T_src_pos of t * Loc.t
   | T_bvar of Debruijin.idx
   | T_fvar of Debruijin.lvl
   | T_lam of Symbol.t * Concrete.icit * t
