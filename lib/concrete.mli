@@ -106,11 +106,11 @@ type program =
       declarations : Top_level.t list;
     }
 
-val pp_program : Format.formatter -> program -> unit
-val show_program : program -> string
 val e_app : Expr.t -> icit -> Expr.t -> Expr.t
 val e_let : Symbol.t -> Expr.t -> Expr.t -> Expr.t
 val e_match : Expr.t -> (Pattern.t * Expr.t) list -> Expr.t
 val e_lam : Symbol.t list -> Expr.t -> Expr.t
 val e_pi : Expr.t -> Expr.t -> Expr.t
 val curry : Expr.t -> (icit * Expr.t) list -> Expr.t
+val pp_program : Format.formatter -> program -> unit
+val show_program : program -> string
