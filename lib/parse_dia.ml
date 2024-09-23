@@ -49,19 +49,28 @@ let parse_file text =
       Printf.eprintf "An error occurred: %s\n" (Printexc.to_string exn);
       Error "Exception thrown"
 
-let parse_golden_test code =
-  print_endline
-    (match parse_file code with
-    | Ok v -> Syntax.show_program v
-    | Error err -> err)
+module Tests = struct
+  let run_test code =
+    print_endline
+      (match parse_file code with
+      | Ok v -> Syntax.show_program v
+      | Error err -> err)
 
-let%expect_test "parse inductive naturals" =
-  parse_golden_test
-    {| let Nat = inductive
-       | zero : Nat
-       | succ : (pred : Nat) -> Nat |};
-  [%expect
-    {|
-    <YOUR SYNTAX ERROR MESSAGE HERE> : 7
+  let%expect_test "pattern matching" =
+    run_test
+      {| let Nat =
+          (value : Nat)
+          -> (P : Nat -> Set)
+          -> (fzero : P zero)
+          -> (fsuc  : (pred : Nat) -> P (succ pred))
+          -> P value
+          |};
+    [%expect {| |}]
 
-    Syntax error at line 1, column 10: <YOUR SYNTAX ERROR MESSAGE HERE> : 7 |}]
+  let%expect_test "parse inductive naturals" =
+    run_test
+      {| let Nat = inductive
+         | zero : Nat
+         | succ : (pred : Nat) -> Nat |};
+    [%expect {| |}]
+end

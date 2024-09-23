@@ -11,51 +11,43 @@ type name =
 
 module Pattern = struct
   type t =
-    | Constructor of {
+    | P_constructor of {
         name : name;
         args : t list;
       }
-    | Var of Symbol.t
+    | P_var of Symbol.t
   [@@deriving show]
 end
 
 module Expr = struct
   (* Core language syntax *)
   type t =
-    | U
-    | Num of int
-    | Src_pos of t Loc.t
-    | Var of Symbol.t
-    | Lam of {
+    | E_u
+    | E_hole
+    | E_num of int
+    | E_src_pos of t Loc.t
+    | E_var of Symbol.t
+    | E_lam of {
         params : Symbol.t list;
         body : t;
       }
-    | App of {
+    | E_app of {
         callee : t;
         icit : icit;
         arg : t;
       }
-    | Pi of {
+    | E_pi of {
         domain : t;
         codomain : t;
       }
-    | Hole
-    | Let of {
+    | E_let of {
         name : Symbol.t;
         value : t;
         next : t;
       }
-    | Match of {
+    | E_match of {
         scrutinee : t;
         cases : (Pattern.t * t) list;
-      }
-    | Inductive of constructor list
-  [@@deriving show]
-
-  and constructor =
-    | Constructor of {
-        name : name;
-        tt : t;
       }
   [@@deriving show]
 
@@ -68,18 +60,31 @@ module Expr = struct
   [@@deriving show]
 end
 
-module TopLevel = struct
+module Top_level = struct
   type t =
-    | Src_pos of t Loc.t
-    | Definition of {
+    | T_src_pos of t Loc.t
+    | T_let_decl of {
         name : name;
         parameters : Expr.parameter list;
         tt : Expr.t;
         value : Expr.t;
       }
-    | Pragma of {
+    | T_type_decl of {
+        name : name;
+        parameters : Expr.parameter list;
+        tt : Expr.t;
+        constructors : constructor list;
+      }
+    | T_pragma of {
         name : string Loc.t;
         arguments : string Loc.t list;
+      }
+  [@@deriving show]
+
+  and constructor =
+    | Constructor of {
+        name : name;
+        tt : t;
       }
   [@@deriving show]
 end
@@ -87,18 +92,18 @@ end
 type program =
   | Program of {
       hashbang : string Loc.t option;
-      declarations : TopLevel.t list;
+      declarations : Top_level.t list;
     }
 [@@deriving show]
 
-let e_app callee icit arg = Expr.App { callee; icit; arg }
-let e_let name value next = Expr.Let { name; value; next }
-let e_match scrutinee cases = Expr.Match { scrutinee; cases }
-let e_lam params body = Expr.Lam { params; body }
-let e_pi domain codomain = Expr.Pi { domain; codomain }
+let e_app callee icit arg = Expr.E_app { callee; icit; arg }
+let e_let name value next = Expr.E_let { name; value; next }
+let e_match scrutinee cases = Expr.E_match { scrutinee; cases }
+let e_lam params body = Expr.E_lam { params; body }
+let e_pi domain codomain = Expr.E_pi { domain; codomain }
 
 let curry callee args =
   args
   |> List.fold_left
-       (fun callee (icit, arg) -> Expr.App { callee; icit; arg })
+       (fun callee (icit, arg) -> Expr.E_app { callee; icit; arg })
        callee

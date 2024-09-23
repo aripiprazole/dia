@@ -1,9 +1,9 @@
 type t =
-  | Flex of Term.meta_var * spine
-  | Rigid of int * spine
-  | Lam of Symbol.t * Syntax.icit * closure
-  | Pi of Symbol.t * Syntax.icit * t * closure
-  | U
+  | V_flex of Term.meta_var * spine
+  | V_rigid of int * spine
+  | V_lam of Symbol.t * Concrete.icit * closure
+  | V_pi of Symbol.t * Concrete.icit * t * closure
+  | V_u
 
 and closure =
   | Closure of {
@@ -11,7 +11,7 @@ and closure =
       expr : Term.t;
     }
 
-and spine = (t * Syntax.icit) list
+and spine = (t * Concrete.icit) list
 
 val pp : Format.formatter -> t -> unit
 val show : t -> string

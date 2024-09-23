@@ -1,5 +1,7 @@
 open Aux
-open Core
+open Term
+open Value
+open Abstract.Expr
 module Ren = Map.Make (Int)
 
 (* Partial renaming *)
@@ -10,9 +12,9 @@ type pren = {
 }
 
 type error_kind =
-  | Unify_error
-  | Occurs_check
-  | Escaping_variable
+  | E_unify_error
+  | E_occurs_check
+  | E_escaping_variable
 
 type error = {
   ctx : Ctx.t;
@@ -39,11 +41,11 @@ let rec invert gamma = function
 | (t, _) :: sp -> begin
     let { dom; ren; _ } = invert gamma sp in
     match t |> force with
-    | Value.Rigid (lvl, []) when Option.is_none (Ren.find_opt lvl ren) ->
+    | V_rigid (lvl, []) when Option.is_none (Ren.find_opt lvl ren) ->
         let dom = dom + 1 in
         let ren = ren |> Ren.add lvl dom in
         { dom; ren; cod = gamma }
-    | _ -> raise @@ Unification_error Unify_error
+    | _ -> raise @@ Unification_error E_unify_error
   end
 
 (* Perform the partial renaming on rhs, while also checking for "m" occurrences. *)
@@ -52,26 +54,26 @@ let rec rename m pren v =
   | [] -> tt
   | sp ->
       let sp' = sp |> List.map (fun (v, icit) -> (rename m pren v, icit)) in
-      Term.App (tt_app tt pren sp, sp')
+      T_app (tt_app tt pren sp, sp')
   in
 
   match v |> force with
-  | Value.Flex (m', sp) ->
-      if m = m' then raise @@ Unification_error Occurs_check
-      else tt_app (Term.Hole m') pren sp
-  | Value.Rigid (x, sp) -> begin
+  | V_flex (m', sp) ->
+      if m = m' then raise @@ Unification_error E_occurs_check
+      else tt_app (T_hole m') pren sp
+  | V_rigid (x, sp) -> begin
       match Ren.find_opt x pren.ren with
-      | None -> raise @@ Unification_error Escaping_variable
-      | Some x' -> tt_app (Term.Bvar (Debruijin.lvl_to_idx pren.dom x')) pren sp
+      | None -> raise @@ Unification_error E_escaping_variable
+      | Some x' -> tt_app (T_bvar (Debruijin.lvl_to_idx pren.dom x')) pren sp
     end
-  | Value.Lam (name, icit, closure) ->
+  | V_lam (name, icit, closure) ->
       let cod = rename m (lift pren) (closure $$$ Value.var pren.cod) in
-      Term.Lam (name, icit, cod)
-  | Value.Pi (name, icit, dom, cod) ->
+      T_lam (name, icit, cod)
+  | V_pi (name, icit, dom, cod) ->
       let dom = Term.Dom { icit; name; dom = rename m pren dom } in
       let cod = rename m (lift pren) (cod $$$ Value.var pren.cod) in
-      Term.Pi (dom, cod)
-  | Value.U -> Term.U
+      T_pi (dom, cod)
+  | V_u -> T_u
 
 let solve gamma h sp rhs =
   let partial_renaming = invert gamma sp in
@@ -80,78 +82,78 @@ let solve gamma h sp rhs =
     sp (* Transforms into a implicitness list *)
     |> List.map snd (* Reverts the list *)
     |> List.rev (* Builds lambdas over lambdas *)
-    |> List.fold_left (fun acc next -> Term.Lam (None, next, acc)) rhs
+    |> List.fold_left (fun acc next -> T_lam (None, next, acc)) rhs
   in
   h <-- eval [] lams
 
 (* Unifies two types in a single one *)
 let rec unify l t u =
   match (t |> force, u |> force) with
-  | Value.U, Value.U -> Value.U
+  | V_u, V_u -> V_u
   (* Pi unification *)
-  | Value.Pi (_, i, dom, cod), Value.Pi (_, i', dom', cod') when i = i' ->
+  | V_pi (_, i, dom, cod), V_pi (_, i', dom', cod') when i = i' ->
       let _ = unify l dom dom' in
       let _ =
         unify (Debruijin.shift l) (cod $$$ Value.var l) (cod' $$$ Value.var l)
       in
       t
   (* Lambda unification *)
-  | Value.Lam (_, _, _), Value.Lam (_, _, _)
-  | _, Value.Lam (_, _, _)
-  | Value.Lam (_, _, _), _ ->
+  | V_lam (_, _, _), V_lam (_, _, _)
+  | _, V_lam (_, _, _)
+  | V_lam (_, _, _), _ ->
       unify (Debruijin.shift l) (t $$ Value.var l) (u $$ Value.var l)
   (* Unification of meta variables, it does unifies meta variables that
      are present in the context. *)
-  | Value.Flex (m, sp), u
-  | u, Value.Flex (m, sp) ->
+  | V_flex (m, sp), u
+  | u, V_flex (m, sp) ->
       solve l m sp u;
       t
-  | _ -> raise @@ Unification_error Unify_error
+  | _ -> raise @@ Unification_error E_unify_error
 
 let unify_catch (Ctx.{ lvl = l; _ } as ctx) t u =
   try unify l t u with
   | Unification_error kind -> raise @@ Error { ctx; kind }
 
-let fresh_meta Ctx.{ bounds; _ } = Term.Inserted_meta (fresh (), bounds)
+let fresh_meta Ctx.{ bounds; _ } = T_inserted_meta (fresh (), bounds)
 
 let rec insert ctx = function
-| (Term.Lam (_, Syntax.Impl, _) as tt), va -> (tt, va)
+| (T_lam (_, Concrete.Impl, _) as tt), va -> (tt, va)
 | tt, va -> begin
     match va with
-    | Value.Pi (_, Syntax.Impl, _, cod) ->
+    | V_pi (_, Concrete.Impl, _, cod) ->
         let m = fresh_meta ctx in
         let mv = eval ctx.env m in
-        insert ctx (apply_term Syntax.Impl tt m, cod $$$ mv)
+        insert ctx (apply_term Concrete.Impl tt m, cod $$$ mv)
     | _ -> (tt, va)
   end
 
 let rec check ctx t expected =
   match (t, expected) with
-  | Expr.Src_pos { pos; value }, type_repr ->
+  | E_src_pos { pos; value }, type_repr ->
       check Ctx.{ ctx with pos } value type_repr
-  | Expr.Lam (_, _), Value.Pi (_, _, _, _) -> assert false
-  | Expr.Hole _, _ -> fresh_meta ctx
+  | E_lam _, V_pi (_, _, _, _) -> assert false
+  | E_hole _, _ -> fresh_meta ctx
   | t, expected ->
       let t, inferred = insert ctx (infer ctx t) in
       let _ = unify_catch ctx expected inferred in
       t
 
 and infer ctx = function
-| Expr.U -> (Term.U, Value.U)
-| Expr.Var _ -> assert false
-| Expr.Src_pos { pos; value } -> infer { ctx with pos } value
-| Expr.Lam (_, _) -> assert false
-| Expr.App (_, _) -> assert false
-| Expr.As (term, expected) -> begin
-    let expected = eval ctx.env @@ check ctx expected Value.U in
+| E_u -> (T_u, V_u)
+| E_var _ -> assert false
+| E_src_pos { pos; value } -> infer { ctx with pos } value
+| E_lam _ -> assert false
+| E_app _ -> assert false
+| E_as (term, expected) -> begin
+    let expected = eval ctx.env @@ check ctx expected V_u in
     let term = check ctx term expected in
     (term, expected)
   end
-| Expr.Hole _ ->
+| E_hole _ ->
     let meta = fresh_meta ctx in
     (meta, eval ctx.env @@ fresh_meta ctx)
-| Expr.Pi (name, icit, dom, cod) ->
-    let dom = check ctx dom Value.U in
-    let cod = check (ctx |> Ctx.bind name (eval ctx.env dom)) cod Value.U in
-    (Term.Pi (Term.Dom { name; icit; dom }, cod), Value.U)
-| Expr.Let (_, _, _) -> assert false
+| E_pi (name, icit, dom, cod) ->
+    let dom = check ctx dom V_u in
+    let cod = check (ctx |> Ctx.bind name (eval ctx.env dom)) cod V_u in
+    (T_pi (Dom { name; icit; dom }, cod), V_u)
+| E_let (_, _, _) -> assert false

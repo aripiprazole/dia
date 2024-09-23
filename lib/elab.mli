@@ -1,6 +1,5 @@
 module Ren : sig
-  type key = int
-  type 'a t = 'a Value.Meta_env.t
+  type 'a t
 end
 
 type pren = {
@@ -10,9 +9,9 @@ type pren = {
 }
 
 type error_kind =
-  | Unify_error
-  | Occurs_check
-  | Escaping_variable
+  | E_unify_error
+  | E_occurs_check
+  | E_escaping_variable
 
 type error = {
   ctx : Ctx.t;
@@ -27,11 +26,11 @@ val invert : int -> (Value.t * 'a) list -> pren
 val rename : Term.meta_var -> pren -> Value.t -> Term.t
 
 val solve :
-  int -> Term.meta_var -> (Value.t * Syntax.icit) list -> Value.t -> unit
+  int -> Term.meta_var -> (Value.t * Concrete.icit) list -> Value.t -> unit
 
 val unify : int -> Value.t -> Value.t -> Value.t
 val unify_catch : Ctx.t -> Value.t -> Value.t -> Value.t
 val fresh_meta : Ctx.t -> Term.t
 val insert : Ctx.t -> Term.t * Value.t -> Term.t * Value.t
-val check : Ctx.t -> Core.Expr.t -> Value.t -> Term.t
-val infer : Ctx.t -> Core.Expr.t -> Term.t * Value.t
+val check : Ctx.t -> Abstract.Expr.t -> Value.t -> Term.t
+val infer : Ctx.t -> Abstract.Expr.t -> Term.t * Value.t

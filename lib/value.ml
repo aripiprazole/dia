@@ -1,11 +1,11 @@
 open Effect.Deep
 
 type t =
-  | Flex of Term.meta_var * spine
-  | Rigid of Debruijin.lvl * spine
-  | Lam of Symbol.t * Syntax.icit * closure
-  | Pi of Symbol.t * Syntax.icit * t * closure
-  | U
+  | V_flex of Term.meta_var * spine
+  | V_rigid of Debruijin.lvl * spine
+  | V_lam of Symbol.t * Concrete.icit * closure
+  | V_pi of Symbol.t * Concrete.icit * t * closure
+  | V_u
 [@@deriving show]
 
 and closure =
@@ -15,17 +15,17 @@ and closure =
     }
 [@@deriving show]
 
-and spine = (t * Syntax.icit) list
+and spine = (t * Concrete.icit) list
 
 type hole =
   | Solved of t
   | Unsolved
 
 (* Variable *)
-let var x = Rigid (x, [])
+let var x = V_rigid (x, [])
 
 (* Flexible variable *)
-let meta x = Flex (x, [])
+let meta x = V_flex (x, [])
 
 type _ Effect.t += Lookup_meta_var : Term.meta_var -> hole Effect.t
 type _ Effect.t += Update_meta_var : Term.meta_var * t -> unit Effect.t

@@ -15,11 +15,11 @@ val show_name : name -> string
 
 module Pattern : sig
   type t =
-    | Constructor of {
+    | P_constructor of {
         name : name;
         args : t list;
       }
-    | Var of Symbol.t
+    | P_var of Symbol.t
 
   val pp : Format.formatter -> t -> unit
   val show : t -> string
@@ -27,39 +27,32 @@ end
 
 module Expr : sig
   type t =
-    | U
-    | Num of int
-    | Src_pos of t Loc.t
-    | Var of Symbol.t
-    | Lam of {
+    | E_u
+    | E_hole
+    | E_num of int
+    | E_src_pos of t Loc.t
+    | E_var of Symbol.t
+    | E_lam of {
         params : Symbol.t list;
         body : t;
       }
-    | App of {
+    | E_app of {
         callee : t;
         icit : icit;
         arg : t;
       }
-    | Pi of {
+    | E_pi of {
         domain : t;
         codomain : t;
       }
-    | Hole
-    | Let of {
+    | E_let of {
         name : Symbol.t;
         value : t;
         next : t;
       }
-    | Match of {
+    | E_match of {
         scrutinee : t;
         cases : (Pattern.t * t) list;
-      }
-    | Inductive of constructor list
-
-  and constructor =
-    | Constructor of {
-        name : name;
-        tt : t;
       }
 
   and parameter =
@@ -70,35 +63,47 @@ module Expr : sig
       }
 
   val pp : Format.formatter -> t -> unit
-  val show : t -> string
-  val pp_constructor : Format.formatter -> constructor -> unit
-  val show_constructor : constructor -> string
   val pp_parameter : Format.formatter -> parameter -> unit
+  val show : t -> string
   val show_parameter : parameter -> string
 end
 
-module TopLevel : sig
+module Top_level : sig
   type t =
-    | Src_pos of t Loc.t
-    | Definition of {
+    | T_src_pos of t Loc.t
+    | T_let_decl of {
         name : name;
         parameters : Expr.parameter list;
         tt : Expr.t;
         value : Expr.t;
       }
-    | Pragma of {
+    | T_type_decl of {
+        name : name;
+        parameters : Expr.parameter list;
+        tt : Expr.t;
+        constructors : constructor list;
+      }
+    | T_pragma of {
         name : string Loc.t;
         arguments : string Loc.t list;
       }
 
+  and constructor =
+    | Constructor of {
+        name : name;
+        tt : t;
+      }
+
   val pp : Format.formatter -> t -> unit
+  val pp_constructor : Format.formatter -> constructor -> unit
   val show : t -> string
+  val show_constructor : constructor -> string
 end
 
 type program =
   | Program of {
       hashbang : string Loc.t option;
-      declarations : TopLevel.t list;
+      declarations : Top_level.t list;
     }
 
 val pp_program : Format.formatter -> program -> unit
