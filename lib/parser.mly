@@ -74,7 +74,7 @@ let e_app :=
   | callee = e_app; arg = primary; { e_app callee Expl arg }
   | callee = e_app; LEFT_BRACES; arg = expr; RIGHT_BRACES; { e_app callee Impl arg }
 
-let e_infix := lhs = primary; op = infix_symbol; rhs = primary; { curry (E_var op) [(Expl, lhs); (Expl, rhs)] }
+let e_infix := lhs = e_pi; op = infix_symbol; rhs = e_pi; { curry (E_var op) [(Expl, lhs); (Expl, rhs)] }
 
 let e_pi :=
   | e_app
