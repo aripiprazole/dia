@@ -25,6 +25,6 @@ let rec token buf =
   | Plus (Chars " \n\t") -> token buf
   | number -> NUMBER (int_of_string (lexeme buf))
   | Plus (Chars "+-*/^=<>!&|~?%:") -> INFIX_ID (lexeme buf)
-  | letter, Star (letter | digit) -> ID (lexeme buf)
+  | letter, Star (letter | digit | Chars "+-*/^=<>!&|~?%:") -> ID (lexeme buf)
   | eof -> EOF
   | _ -> failwith @@ "Unexpected character: " ^ Sedlexing.Latin1.lexeme buf

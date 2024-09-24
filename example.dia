@@ -1,9 +1,6 @@
-let (->) (A : Set) (B : Set) : Set :=
-  (_ : A) -> B
-
-let Nat :=
+type Nat =
 | zero : Nat
-| succ : Nat -> Nat
+| succ : (pred : Nat) -> Nat
 
 #pragma NATURAL Nat
 
@@ -19,19 +16,15 @@ let (++) {a : Set} {n m : Nat} (v : Vect a n) (w : Vect a m) : Vect a (n + m) =
   | (cons head tail) => cons head (tail ++ w)
   | nil => w
 
-(* Finite numbers *)
 type Fin (n : Nat) : Set =
 | fzero : Fin (n + 1)
 | fsucc : Fin n -> Fin (n + 1)
 
 type (<) {n m : Nat} =
 | z<s : n < m
-| s<s :
-  n < m
-  ---------
-  n < m + 1
+| s<s : (n < m) -> n < (m + 1)
 
 type False : Set =
 
-let absurd {a : Set} (f : False) : a :=
+let absurd {a : Set} (f : False) : a =
   match f with

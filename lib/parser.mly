@@ -43,8 +43,10 @@ expr: mark_position(plain_expr) { $1 }
 plain_expr:
   | FUN; ps = nonempty_list(symbol); ARROW; e = expr;
     { e_lam ps e }
-  | MATCH; scrutinee = expr; WITH; cases = list(case);
+  | MATCH; scrutinee = expr; WITH; cases = nonempty_list(case);
     { e_match scrutinee cases }
+  | MATCH; scrutinee = expr; WITH
+    { e_match scrutinee [] }
   | LET; name = symbol; EQUALS; value = expr; IN; body = expr;
     { e_let name value body }
   | e = e_pi { e }
@@ -84,15 +86,18 @@ pattern:
   | LEFT_PARENS; name = def_name; args = list(pattern); RIGHT_PARENS;
     { P_constructor { name; args } }
 
-e_app:
+e_app: mark_position(e_app_plain) { $1 }
+e_app_plain:
   | e = primary { e }
   | callee = e_app; arg = primary; { E_app { callee; arg } }
 
-e_infix:
+e_infix: mark_position(e_infix_plain) { $1 }
+e_infix_plain:
   | lhs = e_pi; op = infix_symbol; rhs = e_pi;
     { E_app { callee = E_app { callee = E_var op; arg = lhs }; arg = rhs } }
 
-e_pi:
+e_pi: mark_position(e_pi_plain) { $1 }
+e_pi_plain:
   | e = e_app { e }
   | domain = e_app; ARROW; codomain = e_pi; { E_pi { domain; codomain } }
 
