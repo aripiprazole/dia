@@ -4,4 +4,4 @@ type t = S_symbol of { kind : kind; text : string; pos : Loc.t }
 [@@deriving show]
 
 let text (S_symbol { text; _ }) = text
-let make kind text = S_symbol { kind; text; pos = Loc.Nowhere }
+let make ?(pos = Loc.Nowhere) kind text = S_symbol { kind; text; pos }

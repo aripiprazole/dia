@@ -32,10 +32,10 @@
 
 %%
 
-symbol: name = ID; { Symbol.make K_prefix name }
+symbol: name = ID; { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_prefix name }
 infix_symbol:
-  | name = INFIX_ID; { Symbol.make K_infix name }
-  | COLON; { Symbol.make K_infix ":" }
+  | name = INFIX_ID; { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_infix name }
+  | COLON; { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_infix ":" }
 
 constructor: BAR; name = def_name; tt = type_repr; { Constructor { name; tt; pos = Loc.make_location $startpos $endpos } }
 
@@ -60,9 +60,9 @@ parameter:
 
 def_name:
   | name = symbol;
-    { Symbol.make K_prefix (text name) }
+    { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_prefix (text name) }
   | LEFT_PARENS; name = symbol; RIGHT_PARENS;
-    { Symbol.make K_infix (text name) }
+    { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_infix (text name) }
 
 type_repr: COLON; tt = tt; { tt }
 

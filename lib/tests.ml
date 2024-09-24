@@ -14,13 +14,14 @@ module Syntax_tests = struct
         declarations =
         [Concrete.Top_level.T_let_decl {
            name =
-           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat"; pos = Loc.Nowhere};
+           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:8}};
            parameters = []; tt = Concrete.Expr.E_hole;
            value =
            (Concrete.Expr.E_src_pos (
               (Concrete.Expr.E_var
                  Symbol.S_symbol {kind = Symbol.K_prefix; text = "Set";
-                   pos = Loc.Nowhere}),
+                   pos = Loc.Location {startpos = :1:11; endpos = 1:14}}),
               Loc.Location {startpos = :1:11; endpos = 1:14}));
            pos = Loc.Location {startpos = :1:1; endpos = 1:14}}
           ]} |}]
@@ -33,7 +34,8 @@ module Syntax_tests = struct
         declarations =
         [Concrete.Top_level.T_let_decl {
            name =
-           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat"; pos = Loc.Nowhere};
+           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:8}};
            parameters = []; tt = Concrete.Expr.E_hole;
            value =
            (Concrete.Expr.E_src_pos (
@@ -42,13 +44,13 @@ module Syntax_tests = struct
                 (Concrete.Expr.E_src_pos (
                    (Concrete.Expr.E_var
                       Symbol.S_symbol {kind = Symbol.K_prefix; text = "Set";
-                        pos = Loc.Nowhere}),
+                        pos = Loc.Location {startpos = :1:11; endpos = 1:14}}),
                    Loc.Location {startpos = :1:11; endpos = 1:14}));
                 codomain =
                 (Concrete.Expr.E_src_pos (
                    (Concrete.Expr.E_var
                       Symbol.S_symbol {kind = Symbol.K_prefix; text = "Set";
-                        pos = Loc.Nowhere}),
+                        pos = Loc.Location {startpos = :1:18; endpos = 1:21}}),
                    Loc.Location {startpos = :1:18; endpos = 1:21}))},
               Loc.Location {startpos = :1:11; endpos = 1:21}));
            pos = Loc.Location {startpos = :1:1; endpos = 1:21}}
@@ -62,7 +64,8 @@ module Syntax_tests = struct
         declarations =
         [Concrete.Top_level.T_let_decl {
            name =
-           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat"; pos = Loc.Nowhere};
+           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:8}};
            parameters = []; tt = Concrete.Expr.E_hole;
            value =
            (Concrete.Expr.E_src_pos (
@@ -74,18 +77,19 @@ module Syntax_tests = struct
                         callee =
                         (Concrete.Expr.E_var
                            Symbol.S_symbol {kind = Symbol.K_infix; text = ":";
-                             pos = Loc.Nowhere});
+                             pos = Loc.Location {startpos = :1:14; endpos = 1:15}});
                         arg =
                         (Concrete.Expr.E_src_pos (
                            (Concrete.Expr.E_var
                               Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
-                                pos = Loc.Nowhere}),
+                                pos =
+                                Loc.Location {startpos = :1:12; endpos = 1:13}}),
                            Loc.Location {startpos = :1:12; endpos = 1:13}))};
                       arg =
                       (Concrete.Expr.E_src_pos (
                          (Concrete.Expr.E_var
                             Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat";
-                              pos = Loc.Nowhere}),
+                              pos = Loc.Location {startpos = :1:16; endpos = 1:19}}),
                          Loc.Location {startpos = :1:16; endpos = 1:19}))},
                     Loc.Location {startpos = :1:12; endpos = 1:19}))),
               Loc.Location {startpos = :1:11; endpos = 1:20}));
@@ -100,7 +104,8 @@ module Syntax_tests = struct
         declarations =
         [Concrete.Top_level.T_let_decl {
            name =
-           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat"; pos = Loc.Nowhere};
+           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:8}};
            parameters = []; tt = Concrete.Expr.E_hole;
            value =
            (Concrete.Expr.E_src_pos (
@@ -115,18 +120,23 @@ module Syntax_tests = struct
                              callee =
                              (Concrete.Expr.E_var
                                 Symbol.S_symbol {kind = Symbol.K_infix; text = ":";
-                                  pos = Loc.Nowhere});
+                                  pos =
+                                  Loc.Location {startpos = :1:14; endpos = 1:15}});
                              arg =
                              (Concrete.Expr.E_src_pos (
                                 (Concrete.Expr.E_var
                                    Symbol.S_symbol {kind = Symbol.K_prefix;
-                                     text = "x"; pos = Loc.Nowhere}),
+                                     text = "x";
+                                     pos =
+                                     Loc.Location {startpos = :1:12; endpos = 1:13}}),
                                 Loc.Location {startpos = :1:12; endpos = 1:13}))};
                            arg =
                            (Concrete.Expr.E_src_pos (
                               (Concrete.Expr.E_var
                                  Symbol.S_symbol {kind = Symbol.K_prefix;
-                                   text = "Nat"; pos = Loc.Nowhere}),
+                                   text = "Nat";
+                                   pos =
+                                   Loc.Location {startpos = :1:16; endpos = 1:19}}),
                               Loc.Location {startpos = :1:16; endpos = 1:19}))},
                          Loc.Location {startpos = :1:12; endpos = 1:19}))),
                    Loc.Location {startpos = :1:11; endpos = 1:20}));
@@ -134,7 +144,7 @@ module Syntax_tests = struct
                 (Concrete.Expr.E_src_pos (
                    (Concrete.Expr.E_var
                       Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
-                        pos = Loc.Nowhere}),
+                        pos = Loc.Location {startpos = :1:24; endpos = 1:25}}),
                    Loc.Location {startpos = :1:24; endpos = 1:25}))},
               Loc.Location {startpos = :1:11; endpos = 1:25}));
            pos = Loc.Location {startpos = :1:1; endpos = 1:25}}
@@ -148,7 +158,8 @@ module Syntax_tests = struct
         declarations =
         [Concrete.Top_level.T_let_decl {
            name =
-           Symbol.S_symbol {kind = Symbol.K_prefix; text = "x"; pos = Loc.Nowhere};
+           Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:6}};
            parameters = []; tt = Concrete.Expr.E_hole;
            value =
            (Concrete.Expr.E_src_pos (
@@ -157,13 +168,13 @@ module Syntax_tests = struct
                 (Concrete.Expr.E_src_pos (
                    (Concrete.Expr.E_var
                       Symbol.S_symbol {kind = Symbol.K_prefix; text = "f";
-                        pos = Loc.Nowhere}),
+                        pos = Loc.Location {startpos = :1:9; endpos = 1:10}}),
                    Loc.Location {startpos = :1:9; endpos = 1:10}));
                 arg =
                 (Concrete.Expr.E_src_pos (
                    (Concrete.Expr.E_var
                       Symbol.S_symbol {kind = Symbol.K_prefix; text = "y";
-                        pos = Loc.Nowhere}),
+                        pos = Loc.Location {startpos = :1:11; endpos = 1:12}}),
                    Loc.Location {startpos = :1:11; endpos = 1:12}))},
               Loc.Location {startpos = :1:9; endpos = 1:12}));
            pos = Loc.Location {startpos = :1:1; endpos = 1:12}}
@@ -177,7 +188,8 @@ module Syntax_tests = struct
         declarations =
         [Concrete.Top_level.T_let_decl {
            name =
-           Symbol.S_symbol {kind = Symbol.K_prefix; text = "x"; pos = Loc.Nowhere};
+           Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:6}};
            parameters = []; tt = Concrete.Expr.E_hole;
            value =
            (Concrete.Expr.E_src_pos (
@@ -188,13 +200,13 @@ module Syntax_tests = struct
                   (Concrete.Expr.E_src_pos (
                      (Concrete.Expr.E_var
                         Symbol.S_symbol {kind = Symbol.K_prefix; text = "f";
-                          pos = Loc.Nowhere}),
+                          pos = Loc.Location {startpos = :1:9; endpos = 1:10}}),
                      Loc.Location {startpos = :1:9; endpos = 1:10}));
                   arg =
                   (Concrete.Expr.E_src_pos (
                      (Concrete.Expr.E_var
                         Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
-                          pos = Loc.Nowhere}),
+                          pos = Loc.Location {startpos = :1:11; endpos = 1:12}}),
                      Loc.Location {startpos = :1:11; endpos = 1:12}))};
                 codomain =
                 Concrete.Expr.E_app {
@@ -202,13 +214,13 @@ module Syntax_tests = struct
                   (Concrete.Expr.E_src_pos (
                      (Concrete.Expr.E_var
                         Symbol.S_symbol {kind = Symbol.K_prefix; text = "f";
-                          pos = Loc.Nowhere}),
+                          pos = Loc.Location {startpos = :1:16; endpos = 1:17}}),
                      Loc.Location {startpos = :1:16; endpos = 1:17}));
                   arg =
                   (Concrete.Expr.E_src_pos (
                      (Concrete.Expr.E_var
                         Symbol.S_symbol {kind = Symbol.K_prefix; text = "y";
-                          pos = Loc.Nowhere}),
+                          pos = Loc.Location {startpos = :1:18; endpos = 1:19}}),
                      Loc.Location {startpos = :1:18; endpos = 1:19}))}},
               Loc.Location {startpos = :1:9; endpos = 1:19}));
            pos = Loc.Location {startpos = :1:1; endpos = 1:19}}
@@ -222,7 +234,8 @@ module Syntax_tests = struct
         declarations =
         [Concrete.Top_level.T_let_decl {
            name =
-           Symbol.S_symbol {kind = Symbol.K_prefix; text = "x"; pos = Loc.Nowhere};
+           Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:6}};
            parameters = []; tt = Concrete.Expr.E_hole;
            value =
            (Concrete.Expr.E_src_pos (
@@ -237,12 +250,15 @@ module Syntax_tests = struct
                              callee =
                              (Concrete.Expr.E_var
                                 Symbol.S_symbol {kind = Symbol.K_infix; text = ":";
-                                  pos = Loc.Nowhere});
+                                  pos =
+                                  Loc.Location {startpos = :1:12; endpos = 1:13}});
                              arg =
                              (Concrete.Expr.E_src_pos (
                                 (Concrete.Expr.E_var
                                    Symbol.S_symbol {kind = Symbol.K_prefix;
-                                     text = "x"; pos = Loc.Nowhere}),
+                                     text = "x";
+                                     pos =
+                                     Loc.Location {startpos = :1:10; endpos = 1:11}}),
                                 Loc.Location {startpos = :1:10; endpos = 1:11}))};
                            arg =
                            Concrete.Expr.E_app {
@@ -250,13 +266,17 @@ module Syntax_tests = struct
                              (Concrete.Expr.E_src_pos (
                                 (Concrete.Expr.E_var
                                    Symbol.S_symbol {kind = Symbol.K_prefix;
-                                     text = "f"; pos = Loc.Nowhere}),
+                                     text = "f";
+                                     pos =
+                                     Loc.Location {startpos = :1:14; endpos = 1:15}}),
                                 Loc.Location {startpos = :1:14; endpos = 1:15}));
                              arg =
                              (Concrete.Expr.E_src_pos (
                                 (Concrete.Expr.E_var
                                    Symbol.S_symbol {kind = Symbol.K_prefix;
-                                     text = "x"; pos = Loc.Nowhere}),
+                                     text = "x";
+                                     pos =
+                                     Loc.Location {startpos = :1:16; endpos = 1:17}}),
                                 Loc.Location {startpos = :1:16; endpos = 1:17}))}},
                          Loc.Location {startpos = :1:10; endpos = 1:17}))),
                    Loc.Location {startpos = :1:9; endpos = 1:18}));
@@ -266,13 +286,13 @@ module Syntax_tests = struct
                   (Concrete.Expr.E_src_pos (
                      (Concrete.Expr.E_var
                         Symbol.S_symbol {kind = Symbol.K_prefix; text = "f";
-                          pos = Loc.Nowhere}),
+                          pos = Loc.Location {startpos = :1:22; endpos = 1:23}}),
                      Loc.Location {startpos = :1:22; endpos = 1:23}));
                   arg =
                   (Concrete.Expr.E_src_pos (
                      (Concrete.Expr.E_var
                         Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
-                          pos = Loc.Nowhere}),
+                          pos = Loc.Location {startpos = :1:24; endpos = 1:25}}),
                      Loc.Location {startpos = :1:24; endpos = 1:25}))}},
               Loc.Location {startpos = :1:9; endpos = 1:25}));
            pos = Loc.Location {startpos = :1:1; endpos = 1:25}}
@@ -292,7 +312,8 @@ module Syntax_tests = struct
         declarations =
         [Concrete.Top_level.T_let_decl {
            name =
-           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat"; pos = Loc.Nowhere};
+           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:8}};
            parameters = []; tt = Concrete.Expr.E_hole;
            value =
            (Concrete.Expr.E_src_pos (
@@ -307,18 +328,23 @@ module Syntax_tests = struct
                              callee =
                              (Concrete.Expr.E_var
                                 Symbol.S_symbol {kind = Symbol.K_infix; text = ":";
-                                  pos = Loc.Nowhere});
+                                  pos =
+                                  Loc.Location {startpos = :2:28; endpos = 2:29}});
                              arg =
                              (Concrete.Expr.E_src_pos (
                                 (Concrete.Expr.E_var
                                    Symbol.S_symbol {kind = Symbol.K_prefix;
-                                     text = "value"; pos = Loc.Nowhere}),
+                                     text = "value";
+                                     pos =
+                                     Loc.Location {startpos = :2:22; endpos = 2:27}}),
                                 Loc.Location {startpos = :2:22; endpos = 2:27}))};
                            arg =
                            (Concrete.Expr.E_src_pos (
                               (Concrete.Expr.E_var
                                  Symbol.S_symbol {kind = Symbol.K_prefix;
-                                   text = "Nat"; pos = Loc.Nowhere}),
+                                   text = "Nat";
+                                   pos =
+                                   Loc.Location {startpos = :2:30; endpos = 2:33}}),
                               Loc.Location {startpos = :2:30; endpos = 2:33}))},
                          Loc.Location {startpos = :2:22; endpos = 2:33}))),
                    Loc.Location {startpos = :2:21; endpos = 2:34}));
@@ -334,12 +360,17 @@ module Syntax_tests = struct
                                callee =
                                (Concrete.Expr.E_var
                                   Symbol.S_symbol {kind = Symbol.K_infix;
-                                    text = ":"; pos = Loc.Nowhere});
+                                    text = ":";
+                                    pos =
+                                    Loc.Location {startpos = :3:51; endpos = 3:52}});
                                arg =
                                (Concrete.Expr.E_src_pos (
                                   (Concrete.Expr.E_var
                                      Symbol.S_symbol {kind = Symbol.K_prefix;
-                                       text = "P"; pos = Loc.Nowhere}),
+                                       text = "P";
+                                       pos =
+                                       Loc.Location {startpos = :3:49;
+                                         endpos = 3:50}}),
                                   Loc.Location {startpos = :3:49; endpos = 3:50}))};
                              arg =
                              Concrete.Expr.E_pi {
@@ -347,13 +378,19 @@ module Syntax_tests = struct
                                (Concrete.Expr.E_src_pos (
                                   (Concrete.Expr.E_var
                                      Symbol.S_symbol {kind = Symbol.K_prefix;
-                                       text = "Nat"; pos = Loc.Nowhere}),
+                                       text = "Nat";
+                                       pos =
+                                       Loc.Location {startpos = :3:53;
+                                         endpos = 3:56}}),
                                   Loc.Location {startpos = :3:53; endpos = 3:56}));
                                codomain =
                                (Concrete.Expr.E_src_pos (
                                   (Concrete.Expr.E_var
                                      Symbol.S_symbol {kind = Symbol.K_prefix;
-                                       text = "Set"; pos = Loc.Nowhere}),
+                                       text = "Set";
+                                       pos =
+                                       Loc.Location {startpos = :3:60;
+                                         endpos = 3:63}}),
                                   Loc.Location {startpos = :3:60; endpos = 3:63}))}},
                            Loc.Location {startpos = :3:49; endpos = 3:63}))),
                      Loc.Location {startpos = :3:48; endpos = 3:64}));
@@ -369,12 +406,17 @@ module Syntax_tests = struct
                                  callee =
                                  (Concrete.Expr.E_var
                                     Symbol.S_symbol {kind = Symbol.K_infix;
-                                      text = ":"; pos = Loc.Nowhere});
+                                      text = ":";
+                                      pos =
+                                      Loc.Location {startpos = :4:85; endpos = 4:86}});
                                  arg =
                                  (Concrete.Expr.E_src_pos (
                                     (Concrete.Expr.E_var
                                        Symbol.S_symbol {kind = Symbol.K_prefix;
-                                         text = "fzero"; pos = Loc.Nowhere}),
+                                         text = "fzero";
+                                         pos =
+                                         Loc.Location {startpos = :4:79;
+                                           endpos = 4:84}}),
                                     Loc.Location {startpos = :4:79; endpos = 4:84}
                                     ))};
                                arg =
@@ -383,14 +425,20 @@ module Syntax_tests = struct
                                  (Concrete.Expr.E_src_pos (
                                     (Concrete.Expr.E_var
                                        Symbol.S_symbol {kind = Symbol.K_prefix;
-                                         text = "P"; pos = Loc.Nowhere}),
+                                         text = "P";
+                                         pos =
+                                         Loc.Location {startpos = :4:87;
+                                           endpos = 4:88}}),
                                     Loc.Location {startpos = :4:87; endpos = 4:88}
                                     ));
                                  arg =
                                  (Concrete.Expr.E_src_pos (
                                     (Concrete.Expr.E_var
                                        Symbol.S_symbol {kind = Symbol.K_prefix;
-                                         text = "zero"; pos = Loc.Nowhere}),
+                                         text = "zero";
+                                         pos =
+                                         Loc.Location {startpos = :4:89;
+                                           endpos = 4:93}}),
                                     Loc.Location {startpos = :4:89; endpos = 4:93}
                                     ))}},
                              Loc.Location {startpos = :4:79; endpos = 4:93}))),
@@ -407,12 +455,18 @@ module Syntax_tests = struct
                                    callee =
                                    (Concrete.Expr.E_var
                                       Symbol.S_symbol {kind = Symbol.K_infix;
-                                        text = ":"; pos = Loc.Nowhere});
+                                        text = ":";
+                                        pos =
+                                        Loc.Location {startpos = :5:115;
+                                          endpos = 5:116}});
                                    arg =
                                    (Concrete.Expr.E_src_pos (
                                       (Concrete.Expr.E_var
                                          Symbol.S_symbol {kind = Symbol.K_prefix;
-                                           text = "fsuc"; pos = Loc.Nowhere}),
+                                           text = "fsuc";
+                                           pos =
+                                           Loc.Location {startpos = :5:109;
+                                             endpos = 5:113}}),
                                       Loc.Location {startpos = :5:109;
                                         endpos = 5:113}
                                       ))};
@@ -429,14 +483,21 @@ module Syntax_tests = struct
                                                 (Concrete.Expr.E_var
                                                    Symbol.S_symbol {
                                                      kind = Symbol.K_infix;
-                                                     text = ":"; pos = Loc.Nowhere});
+                                                     text = ":";
+                                                     pos =
+                                                     Loc.Location {
+                                                       startpos = :5:123;
+                                                       endpos = 5:124}});
                                                 arg =
                                                 (Concrete.Expr.E_src_pos (
                                                    (Concrete.Expr.E_var
                                                       Symbol.S_symbol {
                                                         kind = Symbol.K_prefix;
                                                         text = "pred";
-                                                        pos = Loc.Nowhere}),
+                                                        pos =
+                                                        Loc.Location {
+                                                          startpos = :5:118;
+                                                          endpos = 5:122}}),
                                                    Loc.Location {startpos = :5:118;
                                                      endpos = 5:122}
                                                    ))};
@@ -446,7 +507,10 @@ module Syntax_tests = struct
                                                     Symbol.S_symbol {
                                                       kind = Symbol.K_prefix;
                                                       text = "Nat";
-                                                      pos = Loc.Nowhere}),
+                                                      pos =
+                                                      Loc.Location {
+                                                        startpos = :5:125;
+                                                        endpos = 5:128}}),
                                                  Loc.Location {startpos = :5:125;
                                                    endpos = 5:128}
                                                  ))},
@@ -462,7 +526,10 @@ module Syntax_tests = struct
                                      (Concrete.Expr.E_src_pos (
                                         (Concrete.Expr.E_var
                                            Symbol.S_symbol {kind = Symbol.K_prefix;
-                                             text = "P"; pos = Loc.Nowhere}),
+                                             text = "P";
+                                             pos =
+                                             Loc.Location {startpos = :5:133;
+                                               endpos = 5:134}}),
                                         Loc.Location {startpos = :5:133;
                                           endpos = 5:134}
                                         ));
@@ -477,7 +544,10 @@ module Syntax_tests = struct
                                                       Symbol.S_symbol {
                                                         kind = Symbol.K_prefix;
                                                         text = "succ";
-                                                        pos = Loc.Nowhere}),
+                                                        pos =
+                                                        Loc.Location {
+                                                          startpos = :5:136;
+                                                          endpos = 5:140}}),
                                                    Loc.Location {startpos = :5:136;
                                                      endpos = 5:140}
                                                    ));
@@ -487,7 +557,10 @@ module Syntax_tests = struct
                                                       Symbol.S_symbol {
                                                         kind = Symbol.K_prefix;
                                                         text = "pred";
-                                                        pos = Loc.Nowhere}),
+                                                        pos =
+                                                        Loc.Location {
+                                                          startpos = :5:141;
+                                                          endpos = 5:145}}),
                                                    Loc.Location {startpos = :5:141;
                                                      endpos = 5:145}
                                                    ))},
@@ -505,13 +578,16 @@ module Syntax_tests = struct
                         (Concrete.Expr.E_src_pos (
                            (Concrete.Expr.E_var
                               Symbol.S_symbol {kind = Symbol.K_prefix; text = "P";
-                                pos = Loc.Nowhere}),
+                                pos =
+                                Loc.Location {startpos = :6:161; endpos = 6:162}}),
                            Loc.Location {startpos = :6:161; endpos = 6:162}));
                         arg =
                         (Concrete.Expr.E_src_pos (
                            (Concrete.Expr.E_var
                               Symbol.S_symbol {kind = Symbol.K_prefix;
-                                text = "value"; pos = Loc.Nowhere}),
+                                text = "value";
+                                pos =
+                                Loc.Location {startpos = :6:163; endpos = 6:168}}),
                            Loc.Location {startpos = :6:163; endpos = 6:168}))}}}}},
               Loc.Location {startpos = :2:21; endpos = 6:168}));
            pos = Loc.Location {startpos = :1:1; endpos = 6:168}}
@@ -528,24 +604,25 @@ module Syntax_tests = struct
         declarations =
         [Concrete.Top_level.T_type_decl {
            name =
-           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat"; pos = Loc.Nowhere};
+           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat";
+             pos = Loc.Location {startpos = :1:6; endpos = 1:9}};
            parameters = []; tt = Concrete.Expr.E_hole;
            constructors =
            [Concrete.Top_level.Constructor {
               name =
               Symbol.S_symbol {kind = Symbol.K_prefix; text = "zero";
-                pos = Loc.Nowhere};
+                pos = Loc.Location {startpos = :2:23; endpos = 2:27}};
               tt =
               (Concrete.Expr.E_src_pos (
                  (Concrete.Expr.E_var
                     Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat";
-                      pos = Loc.Nowhere}),
+                      pos = Loc.Location {startpos = :2:30; endpos = 2:33}}),
                  Loc.Location {startpos = :2:30; endpos = 2:33}));
               pos = Loc.Location {startpos = :2:21; endpos = 2:33}};
              Concrete.Top_level.Constructor {
                name =
                Symbol.S_symbol {kind = Symbol.K_prefix; text = "succ";
-                 pos = Loc.Nowhere};
+                 pos = Loc.Location {startpos = :3:45; endpos = 3:49}};
                tt =
                (Concrete.Expr.E_src_pos (
                   Concrete.Expr.E_pi {
@@ -559,19 +636,27 @@ module Syntax_tests = struct
                                  callee =
                                  (Concrete.Expr.E_var
                                     Symbol.S_symbol {kind = Symbol.K_infix;
-                                      text = ":"; pos = Loc.Nowhere});
+                                      text = ":";
+                                      pos =
+                                      Loc.Location {startpos = :3:58; endpos = 3:59}});
                                  arg =
                                  (Concrete.Expr.E_src_pos (
                                     (Concrete.Expr.E_var
                                        Symbol.S_symbol {kind = Symbol.K_prefix;
-                                         text = "pred"; pos = Loc.Nowhere}),
+                                         text = "pred";
+                                         pos =
+                                         Loc.Location {startpos = :3:53;
+                                           endpos = 3:57}}),
                                     Loc.Location {startpos = :3:53; endpos = 3:57}
                                     ))};
                                arg =
                                (Concrete.Expr.E_src_pos (
                                   (Concrete.Expr.E_var
                                      Symbol.S_symbol {kind = Symbol.K_prefix;
-                                       text = "Nat"; pos = Loc.Nowhere}),
+                                       text = "Nat";
+                                       pos =
+                                       Loc.Location {startpos = :3:60;
+                                         endpos = 3:63}}),
                                   Loc.Location {startpos = :3:60; endpos = 3:63}))},
                              Loc.Location {startpos = :3:53; endpos = 3:63}))),
                        Loc.Location {startpos = :3:52; endpos = 3:64}));
@@ -579,7 +664,7 @@ module Syntax_tests = struct
                     (Concrete.Expr.E_src_pos (
                        (Concrete.Expr.E_var
                           Symbol.S_symbol {kind = Symbol.K_prefix; text = "Nat";
-                            pos = Loc.Nowhere}),
+                            pos = Loc.Location {startpos = :3:68; endpos = 3:71}}),
                        Loc.Location {startpos = :3:68; endpos = 3:71}))},
                   Loc.Location {startpos = :3:52; endpos = 3:71}));
                pos = Loc.Location {startpos = :3:43; endpos = 3:71}}
