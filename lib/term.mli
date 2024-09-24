@@ -1,14 +1,9 @@
-type parameter = {
-  name : Symbol.t;
-  icit : Concrete.icit;
-}
+type parameter = { name : Symbol.t; icit : Concrete.icit }
 
 val pp_parameter : Format.formatter -> parameter -> unit
 val show_parameter : parameter -> string
 
-type bound =
-  | Bound
-  | Defined
+type bound = Bound | Defined
 
 val pp_bound : Format.formatter -> bound -> unit
 val show_bound : bound -> string
@@ -30,12 +25,7 @@ type t =
   | T_subst of Symbol.t * t * t
   | T_inserted_meta of meta_var * bound list
 
-and dom =
-  | Dom of {
-      name : Symbol.t;
-      icit : Concrete.icit;
-      dom : t;
-    }
+and dom = Dom of { name : Symbol.t; icit : Concrete.icit; dom : t }
 
 val pp : Format.formatter -> t -> unit
 val pp_dom : Format.formatter -> dom -> unit

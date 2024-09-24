@@ -5,12 +5,7 @@ type t =
   | V_pi of Symbol.t * Concrete.icit * t * closure
   | V_u
 
-and closure =
-  | Closure of {
-      env : t list;
-      expr : Term.t;
-    }
-
+and closure = Closure of { env : t list; expr : Term.t }
 and spine = (t * Concrete.icit) list
 
 val pp : Format.formatter -> t -> unit
@@ -20,9 +15,7 @@ val show_closure : closure -> string
 val pp_spine : Format.formatter -> spine -> unit
 val show_spine : spine -> string
 
-type hole =
-  | Solved of t
-  | Unsolved
+type hole = Solved of t | Unsolved
 
 val var : int -> t
 val meta : Term.meta_var -> t

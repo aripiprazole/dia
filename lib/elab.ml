@@ -12,15 +12,8 @@ type pren = {
   ren : Debruijin.lvl Ren.t; (* renaming map *)
 }
 
-type error_kind =
-  | E_unify_error
-  | E_occurs_check
-  | E_escaping_variable
-
-type error = {
-  ctx : Ctx.t;
-  kind : error_kind;
-}
+type error_kind = E_unify_error | E_occurs_check | E_escaping_variable
+type error = { ctx : Ctx.t; kind : error_kind }
 
 exception Unification_error of error_kind
 exception Error of error

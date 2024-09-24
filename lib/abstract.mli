@@ -15,12 +15,7 @@ module Expr : sig
 end
 
 module Top_level : sig
-  type t =
-    | T_let_decl of {
-        name : Symbol.t;
-        tt : Expr.t;
-        value : Expr.t;
-      }
+  type t = T_let_decl of { name : Symbol.t; tt : Expr.t; value : Expr.t }
 
   val pp : Format.formatter -> t -> unit
   val show : t -> string

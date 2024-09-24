@@ -1,14 +1,5 @@
-type parameter = {
-  name : Symbol.t;
-  icit : Concrete.icit;
-}
-[@@deriving show]
-
-type bound =
-  | Bound
-  | Defined
-[@@deriving show]
-
+type parameter = { name : Symbol.t; icit : Concrete.icit } [@@deriving show]
+type bound = Bound | Defined [@@deriving show]
 type meta_var = Meta_var of int [@@deriving show]
 
 (* Core programming language for dia. It does have explicit
@@ -26,12 +17,7 @@ type t =
   | T_inserted_meta of meta_var * bound list
 [@@deriving show]
 
-and dom =
-  | Dom of {
-      name : Symbol.t;
-      icit : Concrete.icit;
-      dom : t;
-    }
+and dom = Dom of { name : Symbol.t; icit : Concrete.icit; dom : t }
 [@@deriving show]
 
 let rec pi_dom = function

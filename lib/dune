@@ -2,7 +2,8 @@
  (name dia)
  (libraries sedlex menhirLib)
  (inline_tests)
- (preprocess (pps ppx_expect ppx_deriving.show sedlex.ppx)))
+ (preprocess
+  (pps ppx_expect ppx_deriving.show sedlex.ppx)))
 
 (menhir
  (flags --table)

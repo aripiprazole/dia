@@ -1,6 +1,4 @@
-type eval_error =
-  | EE_panic of string
-  | EE_fail_with_pos of Loc.t * eval_error
+type eval_error = EE_panic of string | EE_fail_with_pos of Loc.t * eval_error
 
 exception Eval_error of eval_error
 

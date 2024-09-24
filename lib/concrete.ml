@@ -1,14 +1,8 @@
-type icit =
-  | Expl
-  | Impl
-[@@deriving show]
+type icit = Expl | Impl [@@deriving show]
 
 module Pattern = struct
   type t =
-    | P_constructor of {
-        name : Symbol.t;
-        args : t list;
-      }
+    | P_constructor of { name : Symbol.t; args : t list }
     | P_var of Symbol.t
   [@@deriving show]
 end
@@ -23,72 +17,43 @@ module Expr = struct
     | E_parens of t
     | E_braces of t
     | E_var of Symbol.t
-    | E_lam of {
-        params : Symbol.t list;
-        body : t;
-      }
-    | E_app of {
-        callee : t;
-        arg : t;
-      }
-    | E_pi of {
-        domain : t;
-        codomain : t;
-      }
-    | E_let of {
-        name : Symbol.t;
-        value : t;
-        next : t;
-      }
-    | E_match of {
-        scrutinee : t;
-        cases : (Pattern.t * t) list;
-      }
+    | E_lam of { params : Symbol.t list; body : t }
+    | E_app of { callee : t; arg : t }
+    | E_pi of { domain : t; codomain : t }
+    | E_let of { name : Symbol.t; value : t; next : t }
+    | E_match of { scrutinee : t; cases : (Pattern.t * t) list }
   [@@deriving show]
 
-  and parameter =
-    | Parameter of {
-        names : Symbol.t list;
-        icit : icit;
-        tt : t;
-      }
+  and parameter = Parameter of { names : Symbol.t list; icit : icit; tt : t }
   [@@deriving show]
 end
 
 module Top_level = struct
   type t =
-    | T_src_pos of t * Loc.t
     | T_let_decl of {
         name : Symbol.t;
         parameters : Expr.parameter list;
         tt : Expr.t;
         value : Expr.t;
+        pos : Loc.t;
       }
     | T_type_decl of {
         name : Symbol.t;
         parameters : Expr.parameter list;
         tt : Expr.t;
         constructors : constructor list;
+        pos : Loc.t;
       }
-    | T_pragma of {
-        name : Symbol.t;
-        arguments : Symbol.t list;
-      }
+    | T_pragma of { name : Symbol.t; arguments : Symbol.t list; pos : Loc.t }
   [@@deriving show]
 
   and constructor =
-    | Constructor of {
-        name : Symbol.t;
-        tt : Expr.t;
-      }
+    | Constructor of { name : Symbol.t; tt : Expr.t; pos : Loc.t }
   [@@deriving show]
 end
 
 type program =
-  | Program of {
-      hashbang : Symbol.t option;
-      declarations : Top_level.t list;
-    }
+  | Program of { hashbang : Symbol.t option; declarations : Top_level.t list }
 [@@deriving show]
 
 let e_let name value next = Expr.E_let { name; value; next }

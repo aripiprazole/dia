@@ -1,3 +1,4 @@
 (test
  (name test_dia)
- (preprocess (pps ppx_deriving.show)))
+ (preprocess
+  (pps ppx_deriving.show)))

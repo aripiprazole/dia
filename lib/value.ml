@@ -8,18 +8,10 @@ type t =
   | V_u
 [@@deriving show]
 
-and closure =
-  | Closure of {
-      env : t list;
-      expr : Term.t;
-    }
-[@@deriving show]
-
+and closure = Closure of { env : t list; expr : Term.t } [@@deriving show]
 and spine = (t * Concrete.icit) list
 
-type hole =
-  | Solved of t
-  | Unsolved
+type hole = Solved of t | Unsolved
 
 (* Variable *)
 let var x = V_rigid (x, [])

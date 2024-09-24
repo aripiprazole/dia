@@ -1,6 +1,4 @@
-type origin =
-  | Inserted
-  | Source
+type origin = Inserted | Source
 
 type t = {
   pos : Loc.t; (* error handling *)

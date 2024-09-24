@@ -3,11 +3,7 @@ type lvl = int
 val pp_lvl : Format.formatter -> lvl -> unit
 val show_lvl : lvl -> string
 
-type idx =
-  | Idx of {
-      value : lvl;
-      name : Symbol.t;
-    }
+type idx = Idx of { value : lvl; name : Symbol.t }
 
 val pp_idx : Format.formatter -> idx -> unit
 val show_idx : idx -> string

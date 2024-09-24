@@ -2,21 +2,9 @@ module Ren : sig
   type 'a t
 end
 
-type pren = {
-  dom : int;
-  cod : int;
-  ren : int Ren.t;
-}
-
-type error_kind =
-  | E_unify_error
-  | E_occurs_check
-  | E_escaping_variable
-
-type error = {
-  ctx : Ctx.t;
-  kind : error_kind;
-}
+type pren = { dom : int; cod : int; ren : int Ren.t }
+type error_kind = E_unify_error | E_occurs_check | E_escaping_variable
+type error = { ctx : Ctx.t; kind : error_kind }
 
 exception Unification_error of error_kind
 exception Error of error

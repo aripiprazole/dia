@@ -14,11 +14,6 @@ module Expr = struct
 end
 
 module Top_level = struct
-  type t =
-    | T_let_decl of {
-        name : Symbol.t;
-        tt : Expr.t;
-        value : Expr.t;
-      }
+  type t = T_let_decl of { name : Symbol.t; tt : Expr.t; value : Expr.t }
   [@@deriving show]
 end
