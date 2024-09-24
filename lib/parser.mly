@@ -75,7 +75,7 @@ decl:
     { T_pragma { name; arguments; pos = Loc.make_location $startpos $endpos } }
 
 case:
-  | BAR; p = pattern; DOUBLE_ARROW; e = primary;
+  | BAR; p = pattern; DOUBLE_ARROW; e = tt;
     { (p, e) }
 
 pattern:

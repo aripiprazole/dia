@@ -375,7 +375,7 @@ file: LET ID EQUALS MATCH ID WITH BAR WITH
 ##
 ## Ends in an error in state: 47.
 ##
-## case -> BAR . pattern DOUBLE_ARROW primary [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF BAR ]
+## case -> BAR . pattern DOUBLE_ARROW tt [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## BAR
@@ -423,7 +423,7 @@ file: LET ID EQUALS MATCH ID WITH BAR ID WITH
 ##
 ## Ends in an error in state: 55.
 ##
-## case -> BAR pattern . DOUBLE_ARROW primary [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF BAR ]
+## case -> BAR pattern . DOUBLE_ARROW tt [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## BAR pattern
@@ -435,7 +435,7 @@ file: LET ID EQUALS MATCH ID WITH BAR ID DOUBLE_ARROW WITH
 ##
 ## Ends in an error in state: 56.
 ##
-## case -> BAR pattern DOUBLE_ARROW . primary [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF BAR ]
+## case -> BAR pattern DOUBLE_ARROW . tt [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## BAR pattern DOUBLE_ARROW
@@ -443,21 +443,31 @@ file: LET ID EQUALS MATCH ID WITH BAR ID DOUBLE_ARROW WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID EQUALS MATCH ID WITH BAR ID DOUBLE_ARROW ID NUMBER
+file: LET ID EQUALS MATCH ID WITH BAR ID DOUBLE_ARROW ID EQUALS
 ##
-## Ends in an error in state: 59.
+## Ends in an error in state: 63.
 ##
 ## list(case) -> case . list(case) [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF ]
 ##
 ## The known suffix of the stack is as follows:
 ## case
 ##
+## WARNING: This example involves spurious reductions.
+## This implies that, although the LR(1) items shown above provide an
+## accurate view of the past (what has been recognized so far), they
+## may provide an INCOMPLETE view of the future (what was expected next).
+## In state 35, spurious reduction of production e_pi -> e_app
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 57, spurious reduction of production case -> BAR pattern DOUBLE_ARROW tt
+##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: LET ID COLON LEFT_PARENS ID WITH
 ##
-## Ends in an error in state: 61.
+## Ends in an error in state: 65.
 ##
 ## plain_primary -> LEFT_PARENS expr . RIGHT_PARENS [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA NUMBER LET LEFT_PARENS LEFT_BRACES INFIX_ID IN ID EQUALS EOF COLON BAR ARROW ]
 ##
@@ -476,26 +486,7 @@ file: LET ID COLON LEFT_PARENS ID WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID COLON ID WITH
-##
-## Ends in an error in state: 66.
-##
-## e_infix -> e_pi . infix_symbol e_pi [ TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET EQUALS EOF BAR ]
-## plain_tt -> e_pi . [ TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET EQUALS EOF BAR ]
-##
-## The known suffix of the stack is as follows:
-## e_pi
-##
-## WARNING: This example involves spurious reductions.
-## This implies that, although the LR(1) items shown above provide an
-## accurate view of the past (what has been recognized so far), they
-## may provide an INCOMPLETE view of the future (what was expected next).
-## In state 35, spurious reduction of production e_pi -> e_app
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: LET ID LEFT_PARENS ID COLON ID TYPE
+file: LET ID LEFT_PARENS ID COLON ID WITH
 ##
 ## Ends in an error in state: 69.
 ##
@@ -509,10 +500,10 @@ file: LET ID LEFT_PARENS ID COLON ID TYPE
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 35, spurious reduction of production e_pi -> e_app
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 63, spurious reduction of production type_repr -> COLON tt
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 67, spurious reduction of production type_repr -> COLON tt
 ## In state 68, spurious reduction of production option(type_repr) -> type_repr
 ##
 
@@ -548,7 +539,7 @@ file: LET ID LEFT_BRACES ID RIGHT_PARENS
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID LEFT_BRACES ID COLON ID TYPE
+file: LET ID LEFT_BRACES ID COLON ID WITH
 ##
 ## Ends in an error in state: 73.
 ##
@@ -562,10 +553,10 @@ file: LET ID LEFT_BRACES ID COLON ID TYPE
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 35, spurious reduction of production e_pi -> e_app
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 63, spurious reduction of production type_repr -> COLON tt
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 67, spurious reduction of production type_repr -> COLON tt
 ## In state 68, spurious reduction of production option(type_repr) -> type_repr
 ##
 
@@ -583,7 +574,7 @@ file: LET ID LEFT_BRACES ID RIGHT_BRACES WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: TYPE ID COLON ID TYPE
+file: TYPE ID COLON ID WITH
 ##
 ## Ends in an error in state: 78.
 ##
@@ -597,10 +588,10 @@ file: TYPE ID COLON ID TYPE
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 35, spurious reduction of production e_pi -> e_app
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 63, spurious reduction of production type_repr -> COLON tt
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 67, spurious reduction of production type_repr -> COLON tt
 ## In state 68, spurious reduction of production option(type_repr) -> type_repr
 ##
 
@@ -642,7 +633,7 @@ file: TYPE ID EQUALS BAR ID WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: TYPE ID EQUALS BAR ID COLON ID RIGHT_PARENS
+file: TYPE ID EQUALS BAR ID COLON ID WITH
 ##
 ## Ends in an error in state: 84.
 ##
@@ -656,10 +647,10 @@ file: TYPE ID EQUALS BAR ID COLON ID RIGHT_PARENS
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 35, spurious reduction of production e_pi -> e_app
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 63, spurious reduction of production type_repr -> COLON tt
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 67, spurious reduction of production type_repr -> COLON tt
 ## In state 82, spurious reduction of production constructor -> BAR def_name type_repr
 ##
 
@@ -725,7 +716,7 @@ file: LET ID WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID COLON ID TYPE
+file: LET ID COLON ID WITH
 ##
 ## Ends in an error in state: 94.
 ##
@@ -739,10 +730,10 @@ file: LET ID COLON ID TYPE
 ## accurate view of the past (what has been recognized so far), they
 ## may provide an INCOMPLETE view of the future (what was expected next).
 ## In state 35, spurious reduction of production e_pi -> e_app
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 63, spurious reduction of production type_repr -> COLON tt
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 67, spurious reduction of production type_repr -> COLON tt
 ## In state 68, spurious reduction of production option(type_repr) -> type_repr
 ##
 
