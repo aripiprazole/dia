@@ -21,6 +21,7 @@ module Expr : sig
     | E_parens of t
     | E_braces of t
     | E_var of Symbol.t
+    | E_as of t * t
     | E_lam of { params : Symbol.t list; body : t }
     | E_app of { callee : t; arg : t }
     | E_pi of { domain : t; codomain : t }

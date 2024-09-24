@@ -34,9 +34,7 @@
 %%
 
 symbol: name = ID; { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_prefix name }
-infix_symbol:
-  | name = INFIX_ID; { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_infix name }
-  | COLON; { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_infix ":" }
+infix_symbol: name = INFIX_ID; { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_infix name }
 
 constructor: BAR; name = def_name; tt = type_repr; { Constructor { name; tt; pos = Loc.make_location $startpos $endpos } }
 
@@ -77,9 +75,7 @@ decl:
   | PRAGMA; name = def_name; arguments = list(def_name);
     { T_pragma { name; arguments; pos = Loc.make_location $startpos $endpos } }
 
-case:
-  | BAR; p = pattern; DOUBLE_ARROW; e = tt;
-    { (p, e) }
+case: BAR; p = pattern; DOUBLE_ARROW; e = tt; { (p, e) }
 
 pattern:
   | name = symbol;
@@ -94,6 +90,8 @@ e_app_plain:
 
 e_infix: mark_position(e_infix_plain) { $1 }
 e_infix_plain:
+  | lhs = e_pi; COLON; rhs = e_pi;
+    { E_as (lhs, rhs) }
   | lhs = e_pi; op = infix_symbol; rhs = e_pi;
     { E_app { callee = E_app { callee = E_var op; arg = lhs }; arg = rhs } }
 

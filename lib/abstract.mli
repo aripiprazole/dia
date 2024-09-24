@@ -7,8 +7,10 @@ module Expr : sig
     | E_app of t * (Concrete.icit * t) list
     | E_as of t * t
     | E_hole of Symbol.t option
-    | E_pi of Symbol.t * Concrete.icit * t * t
+    | E_pi of dom * t
     | E_let of Symbol.t * t * t
+
+  and dom = Dom of Symbol.t * Concrete.icit * t
 
   val pp : Format.formatter -> t -> unit
   val show : t -> string

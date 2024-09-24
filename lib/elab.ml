@@ -148,7 +148,7 @@ and infer ctx = function
 | E_hole _ ->
     let meta = fresh_meta ctx in
     (meta, eval ctx.env @@ fresh_meta ctx)
-| E_pi (name, icit, dom, cod) ->
+| E_pi (Dom (name, icit, dom), cod) ->
     let dom = check ctx dom V_u in
     let cod = check (ctx |> Ctx.bind name (eval ctx.env dom)) cod V_u in
     (T_pi (Dom { name; icit; dom }, cod), V_u)
