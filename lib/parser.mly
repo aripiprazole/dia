@@ -61,7 +61,7 @@ parameter:
 def_name:
   | name = symbol;
     { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_prefix (text name) }
-  | LEFT_PARENS; name = symbol; RIGHT_PARENS;
+  | LEFT_PARENS; name = infix_symbol; RIGHT_PARENS;
     { Symbol.make ~pos:(Loc.make_location $startpos $endpos) K_infix (text name) }
 
 type_repr: COLON; tt = tt; { tt }

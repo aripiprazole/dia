@@ -7,14 +7,14 @@ let Nat :=
 
 #pragma NATURAL Nat
 
-type (=) {A : Set} (a b : A) : Set =
-| refl : a = a
+type (===) {A : Set} (a b : A) : Set =
+| refl : a === a
 
 type Vect (a : Set) (n : Nat) : Set =
 | cons : (head : a) -> (tail : Vect a n) -> Vect a (n + 1)
 | nil : Vect a 0
 
-let (++) {a : Set} {n m : Nat} (v : Vect a n) (w : Vect a m) : Vect a (n + m) :=
+let (++) {a : Set} {n m : Nat} (v : Vect a n) (w : Vect a m) : Vect a (n + m) =
   match v with
   | (cons head tail) => cons head (tail ++ w)
   | nil => w

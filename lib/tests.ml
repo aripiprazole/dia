@@ -671,4 +671,120 @@ module Syntax_tests = struct
              ];
            pos = Loc.Location {startpos = :1:1; endpos = 3:71}}
           ]} |}]
+
+  let%expect_test "let function parameters" =
+    run_test {| let append {a : Set} (x y : a) = Set |};
+    [%expect
+      {|
+      Concrete.Program {hashbang = None;
+        declarations =
+        [Concrete.Top_level.T_let_decl {
+           name =
+           Symbol.S_symbol {kind = Symbol.K_prefix; text = "append";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:11}};
+           parameters =
+           [Concrete.Expr.Parameter {
+              names =
+              [Symbol.S_symbol {kind = Symbol.K_prefix; text = "a";
+                 pos = Loc.Location {startpos = :1:13; endpos = 1:14}}
+                ];
+              icit = Concrete.Impl;
+              tt =
+              (Concrete.Expr.E_src_pos (
+                 (Concrete.Expr.E_var
+                    Symbol.S_symbol {kind = Symbol.K_prefix; text = "Set";
+                      pos = Loc.Location {startpos = :1:17; endpos = 1:20}}),
+                 Loc.Location {startpos = :1:17; endpos = 1:20}))};
+             Concrete.Expr.Parameter {
+               names =
+               [Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
+                  pos = Loc.Location {startpos = :1:23; endpos = 1:24}};
+                 Symbol.S_symbol {kind = Symbol.K_prefix; text = "y";
+                   pos = Loc.Location {startpos = :1:25; endpos = 1:26}}
+                 ];
+               icit = Concrete.Expl;
+               tt =
+               (Concrete.Expr.E_src_pos (
+                  (Concrete.Expr.E_var
+                     Symbol.S_symbol {kind = Symbol.K_prefix; text = "a";
+                       pos = Loc.Location {startpos = :1:29; endpos = 1:30}}),
+                  Loc.Location {startpos = :1:29; endpos = 1:30}))}
+             ];
+           tt = Concrete.Expr.E_hole;
+           value =
+           (Concrete.Expr.E_src_pos (
+              (Concrete.Expr.E_var
+                 Symbol.S_symbol {kind = Symbol.K_prefix; text = "Set";
+                   pos = Loc.Location {startpos = :1:34; endpos = 1:37}}),
+              Loc.Location {startpos = :1:34; endpos = 1:37}));
+           pos = Loc.Location {startpos = :1:1; endpos = 1:37}}
+          ]} |}]
+
+  let%expect_test "++ function name" =
+    run_test {| let (++) = Set |};
+    [%expect
+      {|
+      Concrete.Program {hashbang = None;
+        declarations =
+        [Concrete.Top_level.T_let_decl {
+           name =
+           Symbol.S_symbol {kind = Symbol.K_infix; text = "++";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:9}};
+           parameters = []; tt = Concrete.Expr.E_hole;
+           value =
+           (Concrete.Expr.E_src_pos (
+              (Concrete.Expr.E_var
+                 Symbol.S_symbol {kind = Symbol.K_prefix; text = "Set";
+                   pos = Loc.Location {startpos = :1:12; endpos = 1:15}}),
+              Loc.Location {startpos = :1:12; endpos = 1:15}));
+           pos = Loc.Location {startpos = :1:1; endpos = 1:15}}
+          ]} |}]
+
+  let%expect_test "let function parameters with symbol name" =
+    run_test {| let (++) {a : Set} (x y : a) = Set |};
+    [%expect
+      {|
+      Concrete.Program {hashbang = None;
+        declarations =
+        [Concrete.Top_level.T_let_decl {
+           name =
+           Symbol.S_symbol {kind = Symbol.K_infix; text = "++";
+             pos = Loc.Location {startpos = :1:5; endpos = 1:9}};
+           parameters =
+           [Concrete.Expr.Parameter {
+              names =
+              [Symbol.S_symbol {kind = Symbol.K_prefix; text = "a";
+                 pos = Loc.Location {startpos = :1:11; endpos = 1:12}}
+                ];
+              icit = Concrete.Impl;
+              tt =
+              (Concrete.Expr.E_src_pos (
+                 (Concrete.Expr.E_var
+                    Symbol.S_symbol {kind = Symbol.K_prefix; text = "Set";
+                      pos = Loc.Location {startpos = :1:15; endpos = 1:18}}),
+                 Loc.Location {startpos = :1:15; endpos = 1:18}))};
+             Concrete.Expr.Parameter {
+               names =
+               [Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
+                  pos = Loc.Location {startpos = :1:21; endpos = 1:22}};
+                 Symbol.S_symbol {kind = Symbol.K_prefix; text = "y";
+                   pos = Loc.Location {startpos = :1:23; endpos = 1:24}}
+                 ];
+               icit = Concrete.Expl;
+               tt =
+               (Concrete.Expr.E_src_pos (
+                  (Concrete.Expr.E_var
+                     Symbol.S_symbol {kind = Symbol.K_prefix; text = "a";
+                       pos = Loc.Location {startpos = :1:27; endpos = 1:28}}),
+                  Loc.Location {startpos = :1:27; endpos = 1:28}))}
+             ];
+           tt = Concrete.Expr.E_hole;
+           value =
+           (Concrete.Expr.E_src_pos (
+              (Concrete.Expr.E_var
+                 Symbol.S_symbol {kind = Symbol.K_prefix; text = "Set";
+                   pos = Loc.Location {startpos = :1:32; endpos = 1:35}}),
+              Loc.Location {startpos = :1:32; endpos = 1:35}));
+           pos = Loc.Location {startpos = :1:1; endpos = 1:35}}
+          ]} |}]
 end
