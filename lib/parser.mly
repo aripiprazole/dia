@@ -33,7 +33,9 @@
 %%
 
 let symbol := name = ID; { Symbol.make K_prefix name }
-let infix_symbol := name = INFIX_ID; { Symbol.make K_infix name } | COLON; { Symbol.make K_infix ":" }
+let infix_symbol :=
+  | name = INFIX_ID; { Symbol.make K_infix name }
+  | COLON; { Symbol.make K_infix ":" }
 
 let expr :=
   | FUN; ps = nonempty_list(symbol); ARROW; e = expr; { e_lam ps e }
@@ -62,6 +64,8 @@ let decl :=
     { T_let_decl { name; parameters; tt = Option.value ~default:E_hole tt; value } }
   | TYPE; name = def_name; parameters = list(parameter); tt = option(type_repr); EQUALS; constructors = list(constructor);
     { T_type_decl { name; parameters; tt = Option.value ~default:E_hole tt; constructors } }
+  | PRAGMA; name = def_name; arguments = list(def_name);
+    { T_pragma { name; arguments; } }
 
 let case := BAR; p = pattern; DOUBLE_ARROW; e = primary; { (p, e) }
 

@@ -12,6 +12,7 @@ let rec token buf =
   | "match" -> MATCH
   | "with" -> WITH
   | "fun" -> FUN
+  | "#pragma" -> PRAGMA
   | "->" -> ARROW
   | "=>" -> DOUBLE_ARROW
   | "=" -> EQUALS
