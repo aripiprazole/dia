@@ -26,7 +26,7 @@ file: LET LEFT_PARENS WITH
 ##
 ## Ends in an error in state: 2.
 ##
-## def_name -> LEFT_PARENS . infix_symbol RIGHT_PARENS [ TYPE RIGHT_PARENS PRAGMA LET LEFT_PARENS LEFT_BRACES ID EQUALS EOF COLON ]
+## def_name -> LEFT_PARENS . infix_symbol RIGHT_PARENS [ TYPE PRAGMA LET LEFT_PARENS LEFT_BRACES ID EQUALS EOF COLON ]
 ##
 ## The known suffix of the stack is as follows:
 ## LEFT_PARENS
@@ -38,7 +38,7 @@ file: LET LEFT_PARENS COLON WITH
 ##
 ## Ends in an error in state: 5.
 ##
-## def_name -> LEFT_PARENS infix_symbol . RIGHT_PARENS [ TYPE RIGHT_PARENS PRAGMA LET LEFT_PARENS LEFT_BRACES ID EQUALS EOF COLON ]
+## def_name -> LEFT_PARENS infix_symbol . RIGHT_PARENS [ TYPE PRAGMA LET LEFT_PARENS LEFT_BRACES ID EQUALS EOF COLON ]
 ##
 ## The known suffix of the stack is as follows:
 ## LEFT_PARENS infix_symbol
@@ -394,57 +394,40 @@ file: LET ID EQUALS MATCH ID WITH BAR WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID EQUALS MATCH ID WITH BAR LEFT_PARENS WITH
+file: LET ID EQUALS MATCH ID WITH BAR ID WITH
 ##
 ## Ends in an error in state: 54.
 ##
-## pattern -> LEFT_PARENS . def_name list(pattern) RIGHT_PARENS [ RIGHT_PARENS LEFT_PARENS ID DOUBLE_ARROW ]
+## def_name -> symbol . [ LEFT_PARENS ]
+## pattern -> symbol . [ RIGHT_PARENS DOUBLE_ARROW COMMA ]
 ##
 ## The known suffix of the stack is as follows:
-## LEFT_PARENS
+## symbol
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
-file: LET ID EQUALS MATCH ID WITH BAR LEFT_PARENS ID WITH
+file: LET ID EQUALS MATCH ID WITH BAR ID RIGHT_PARENS
 ##
 ## Ends in an error in state: 55.
-##
-## pattern -> LEFT_PARENS def_name . list(pattern) RIGHT_PARENS [ RIGHT_PARENS LEFT_PARENS ID DOUBLE_ARROW ]
-##
-## The known suffix of the stack is as follows:
-## LEFT_PARENS def_name
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: LET ID EQUALS MATCH ID WITH BAR LEFT_PARENS ID ID WITH
-##
-## Ends in an error in state: 57.
-##
-## list(pattern) -> pattern . list(pattern) [ RIGHT_PARENS ]
-##
-## The known suffix of the stack is as follows:
-## pattern
-##
-
-<YOUR SYNTAX ERROR MESSAGE HERE>
-
-file: LET ID EQUALS MATCH ID WITH BAR ID WITH
-##
-## Ends in an error in state: 61.
 ##
 ## case -> BAR pattern . DOUBLE_ARROW tt [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF BAR ]
 ##
 ## The known suffix of the stack is as follows:
 ## BAR pattern
 ##
+## WARNING: This example involves spurious reductions.
+## This implies that, although the LR(1) items shown above provide an
+## accurate view of the past (what has been recognized so far), they
+## may provide an INCOMPLETE view of the future (what was expected next).
+## In state 54, spurious reduction of production pattern -> symbol
+##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: LET ID EQUALS MATCH ID WITH BAR ID DOUBLE_ARROW WITH
 ##
-## Ends in an error in state: 62.
+## Ends in an error in state: 56.
 ##
 ## case -> BAR pattern DOUBLE_ARROW . tt [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF BAR ]
 ##
@@ -454,9 +437,64 @@ file: LET ID EQUALS MATCH ID WITH BAR ID DOUBLE_ARROW WITH
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
+file: LET ID EQUALS MATCH ID WITH BAR LEFT_PARENS COLON RIGHT_PARENS WITH
+##
+## Ends in an error in state: 62.
+##
+## pattern -> def_name . LEFT_PARENS loption(separated_nonempty_list(COMMA,pattern)) RIGHT_PARENS [ RIGHT_PARENS DOUBLE_ARROW COMMA ]
+##
+## The known suffix of the stack is as follows:
+## def_name
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: LET ID EQUALS MATCH ID WITH BAR ID LEFT_PARENS WITH
+##
+## Ends in an error in state: 63.
+##
+## pattern -> def_name LEFT_PARENS . loption(separated_nonempty_list(COMMA,pattern)) RIGHT_PARENS [ RIGHT_PARENS DOUBLE_ARROW COMMA ]
+##
+## The known suffix of the stack is as follows:
+## def_name LEFT_PARENS
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: LET ID EQUALS MATCH ID WITH BAR ID LEFT_PARENS ID DOUBLE_ARROW
+##
+## Ends in an error in state: 65.
+##
+## separated_nonempty_list(COMMA,pattern) -> pattern . [ RIGHT_PARENS ]
+## separated_nonempty_list(COMMA,pattern) -> pattern . COMMA separated_nonempty_list(COMMA,pattern) [ RIGHT_PARENS ]
+##
+## The known suffix of the stack is as follows:
+## pattern
+##
+## WARNING: This example involves spurious reductions.
+## This implies that, although the LR(1) items shown above provide an
+## accurate view of the past (what has been recognized so far), they
+## may provide an INCOMPLETE view of the future (what was expected next).
+## In state 54, spurious reduction of production pattern -> symbol
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+file: LET ID EQUALS MATCH ID WITH BAR ID LEFT_PARENS ID COMMA WITH
+##
+## Ends in an error in state: 66.
+##
+## separated_nonempty_list(COMMA,pattern) -> pattern COMMA . separated_nonempty_list(COMMA,pattern) [ RIGHT_PARENS ]
+##
+## The known suffix of the stack is as follows:
+## pattern COMMA
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
 file: LET ID EQUALS MATCH ID WITH BAR ID DOUBLE_ARROW ID EQUALS
 ##
-## Ends in an error in state: 69.
+## Ends in an error in state: 71.
 ##
 ## nonempty_list(case) -> case . [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF ]
 ## nonempty_list(case) -> case . nonempty_list(case) [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA LET IN EOF ]
@@ -471,17 +509,17 @@ file: LET ID EQUALS MATCH ID WITH BAR ID DOUBLE_ARROW ID EQUALS
 ## In state 40, spurious reduction of production e_pi_plain -> e_app
 ## In state 35, spurious reduction of production mark_position(e_pi_plain) -> e_pi_plain
 ## In state 31, spurious reduction of production e_pi -> mark_position(e_pi_plain)
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 63, spurious reduction of production case -> BAR pattern DOUBLE_ARROW tt
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 57, spurious reduction of production case -> BAR pattern DOUBLE_ARROW tt
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: LET ID COLON LEFT_PARENS ID WITH
 ##
-## Ends in an error in state: 71.
+## Ends in an error in state: 73.
 ##
 ## plain_primary -> LEFT_PARENS expr . RIGHT_PARENS [ WITH TYPE RIGHT_PARENS RIGHT_BRACES PRAGMA NUMBER LET LEFT_PARENS LEFT_BRACES INFIX_ID IN ID EQUALS EOF COLON BAR ARROW ]
 ##
@@ -504,7 +542,7 @@ file: LET ID COLON LEFT_PARENS ID WITH
 
 file: LET ID LEFT_PARENS ID COLON ID WITH
 ##
-## Ends in an error in state: 75.
+## Ends in an error in state: 77.
 ##
 ## parameter -> LEFT_PARENS nonempty_list(symbol) option(type_repr) . RIGHT_PARENS [ LEFT_PARENS LEFT_BRACES EQUALS COLON ]
 ##
@@ -518,18 +556,18 @@ file: LET ID LEFT_PARENS ID COLON ID WITH
 ## In state 40, spurious reduction of production e_pi_plain -> e_app
 ## In state 35, spurious reduction of production mark_position(e_pi_plain) -> e_pi_plain
 ## In state 31, spurious reduction of production e_pi -> mark_position(e_pi_plain)
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 73, spurious reduction of production type_repr -> COLON tt
-## In state 74, spurious reduction of production option(type_repr) -> type_repr
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 75, spurious reduction of production type_repr -> COLON tt
+## In state 76, spurious reduction of production option(type_repr) -> type_repr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: LET ID LEFT_BRACES WITH
 ##
-## Ends in an error in state: 77.
+## Ends in an error in state: 79.
 ##
 ## parameter -> LEFT_BRACES . nonempty_list(symbol) option(type_repr) RIGHT_BRACES [ LEFT_PARENS LEFT_BRACES EQUALS COLON ]
 ##
@@ -541,7 +579,7 @@ file: LET ID LEFT_BRACES WITH
 
 file: LET ID LEFT_BRACES ID RIGHT_PARENS
 ##
-## Ends in an error in state: 78.
+## Ends in an error in state: 80.
 ##
 ## parameter -> LEFT_BRACES nonempty_list(symbol) . option(type_repr) RIGHT_BRACES [ LEFT_PARENS LEFT_BRACES EQUALS COLON ]
 ##
@@ -559,7 +597,7 @@ file: LET ID LEFT_BRACES ID RIGHT_PARENS
 
 file: LET ID LEFT_BRACES ID COLON ID WITH
 ##
-## Ends in an error in state: 79.
+## Ends in an error in state: 81.
 ##
 ## parameter -> LEFT_BRACES nonempty_list(symbol) option(type_repr) . RIGHT_BRACES [ LEFT_PARENS LEFT_BRACES EQUALS COLON ]
 ##
@@ -573,18 +611,18 @@ file: LET ID LEFT_BRACES ID COLON ID WITH
 ## In state 40, spurious reduction of production e_pi_plain -> e_app
 ## In state 35, spurious reduction of production mark_position(e_pi_plain) -> e_pi_plain
 ## In state 31, spurious reduction of production e_pi -> mark_position(e_pi_plain)
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 73, spurious reduction of production type_repr -> COLON tt
-## In state 74, spurious reduction of production option(type_repr) -> type_repr
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 75, spurious reduction of production type_repr -> COLON tt
+## In state 76, spurious reduction of production option(type_repr) -> type_repr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: LET ID LEFT_BRACES ID RIGHT_BRACES WITH
 ##
-## Ends in an error in state: 81.
+## Ends in an error in state: 83.
 ##
 ## list(parameter) -> parameter . list(parameter) [ EQUALS COLON ]
 ##
@@ -596,7 +634,7 @@ file: LET ID LEFT_BRACES ID RIGHT_BRACES WITH
 
 file: TYPE ID COLON ID WITH
 ##
-## Ends in an error in state: 84.
+## Ends in an error in state: 86.
 ##
 ## decl -> TYPE def_name list(parameter) option(type_repr) . EQUALS list(constructor) [ TYPE PRAGMA LET EOF ]
 ##
@@ -610,18 +648,18 @@ file: TYPE ID COLON ID WITH
 ## In state 40, spurious reduction of production e_pi_plain -> e_app
 ## In state 35, spurious reduction of production mark_position(e_pi_plain) -> e_pi_plain
 ## In state 31, spurious reduction of production e_pi -> mark_position(e_pi_plain)
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 73, spurious reduction of production type_repr -> COLON tt
-## In state 74, spurious reduction of production option(type_repr) -> type_repr
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 75, spurious reduction of production type_repr -> COLON tt
+## In state 76, spurious reduction of production option(type_repr) -> type_repr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: TYPE ID EQUALS WITH
 ##
-## Ends in an error in state: 85.
+## Ends in an error in state: 87.
 ##
 ## decl -> TYPE def_name list(parameter) option(type_repr) EQUALS . list(constructor) [ TYPE PRAGMA LET EOF ]
 ##
@@ -633,7 +671,7 @@ file: TYPE ID EQUALS WITH
 
 file: TYPE ID EQUALS BAR WITH
 ##
-## Ends in an error in state: 86.
+## Ends in an error in state: 88.
 ##
 ## constructor -> BAR . def_name type_repr [ TYPE PRAGMA LET EOF BAR ]
 ##
@@ -645,7 +683,7 @@ file: TYPE ID EQUALS BAR WITH
 
 file: TYPE ID EQUALS BAR ID WITH
 ##
-## Ends in an error in state: 87.
+## Ends in an error in state: 89.
 ##
 ## constructor -> BAR def_name . type_repr [ TYPE PRAGMA LET EOF BAR ]
 ##
@@ -657,7 +695,7 @@ file: TYPE ID EQUALS BAR ID WITH
 
 file: TYPE ID EQUALS BAR ID COLON ID WITH
 ##
-## Ends in an error in state: 90.
+## Ends in an error in state: 92.
 ##
 ## list(constructor) -> constructor . list(constructor) [ TYPE PRAGMA LET EOF ]
 ##
@@ -671,18 +709,18 @@ file: TYPE ID EQUALS BAR ID COLON ID WITH
 ## In state 40, spurious reduction of production e_pi_plain -> e_app
 ## In state 35, spurious reduction of production mark_position(e_pi_plain) -> e_pi_plain
 ## In state 31, spurious reduction of production e_pi -> mark_position(e_pi_plain)
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 73, spurious reduction of production type_repr -> COLON tt
-## In state 88, spurious reduction of production constructor -> BAR def_name type_repr
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 75, spurious reduction of production type_repr -> COLON tt
+## In state 90, spurious reduction of production constructor -> BAR def_name type_repr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: PRAGMA WITH
 ##
-## Ends in an error in state: 92.
+## Ends in an error in state: 94.
 ##
 ## decl -> PRAGMA . def_name list(def_name) [ TYPE PRAGMA LET EOF ]
 ##
@@ -694,7 +732,7 @@ file: PRAGMA WITH
 
 file: PRAGMA ID WITH
 ##
-## Ends in an error in state: 93.
+## Ends in an error in state: 95.
 ##
 ## decl -> PRAGMA def_name . list(def_name) [ TYPE PRAGMA LET EOF ]
 ##
@@ -706,7 +744,7 @@ file: PRAGMA ID WITH
 
 file: PRAGMA ID ID WITH
 ##
-## Ends in an error in state: 95.
+## Ends in an error in state: 97.
 ##
 ## list(def_name) -> def_name . list(def_name) [ TYPE PRAGMA LET EOF ]
 ##
@@ -718,7 +756,7 @@ file: PRAGMA ID ID WITH
 
 file: LET WITH
 ##
-## Ends in an error in state: 97.
+## Ends in an error in state: 99.
 ##
 ## decl -> LET . def_name list(parameter) option(type_repr) EQUALS expr [ TYPE PRAGMA LET EOF ]
 ##
@@ -730,7 +768,7 @@ file: LET WITH
 
 file: LET ID WITH
 ##
-## Ends in an error in state: 98.
+## Ends in an error in state: 100.
 ##
 ## decl -> LET def_name . list(parameter) option(type_repr) EQUALS expr [ TYPE PRAGMA LET EOF ]
 ##
@@ -742,7 +780,7 @@ file: LET ID WITH
 
 file: LET ID COLON ID WITH
 ##
-## Ends in an error in state: 100.
+## Ends in an error in state: 102.
 ##
 ## decl -> LET def_name list(parameter) option(type_repr) . EQUALS expr [ TYPE PRAGMA LET EOF ]
 ##
@@ -756,18 +794,18 @@ file: LET ID COLON ID WITH
 ## In state 40, spurious reduction of production e_pi_plain -> e_app
 ## In state 35, spurious reduction of production mark_position(e_pi_plain) -> e_pi_plain
 ## In state 31, spurious reduction of production e_pi -> mark_position(e_pi_plain)
-## In state 66, spurious reduction of production plain_tt -> e_pi
-## In state 64, spurious reduction of production mark_position(plain_tt) -> plain_tt
-## In state 65, spurious reduction of production tt -> mark_position(plain_tt)
-## In state 73, spurious reduction of production type_repr -> COLON tt
-## In state 74, spurious reduction of production option(type_repr) -> type_repr
+## In state 60, spurious reduction of production plain_tt -> e_pi
+## In state 58, spurious reduction of production mark_position(plain_tt) -> plain_tt
+## In state 59, spurious reduction of production tt -> mark_position(plain_tt)
+## In state 75, spurious reduction of production type_repr -> COLON tt
+## In state 76, spurious reduction of production option(type_repr) -> type_repr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>
 
 file: LET ID EQUALS WITH
 ##
-## Ends in an error in state: 101.
+## Ends in an error in state: 103.
 ##
 ## decl -> LET def_name list(parameter) option(type_repr) EQUALS . expr [ TYPE PRAGMA LET EOF ]
 ##
@@ -779,7 +817,7 @@ file: LET ID EQUALS WITH
 
 file: LET ID EQUALS ID WITH
 ##
-## Ends in an error in state: 106.
+## Ends in an error in state: 108.
 ##
 ## list(decl) -> decl . list(decl) [ EOF ]
 ##
@@ -796,7 +834,7 @@ file: LET ID EQUALS ID WITH
 ## In state 36, spurious reduction of production plain_expr -> e_pi
 ## In state 28, spurious reduction of production mark_position(plain_expr) -> plain_expr
 ## In state 30, spurious reduction of production expr -> mark_position(plain_expr)
-## In state 102, spurious reduction of production decl -> LET def_name list(parameter) option(type_repr) EQUALS expr
+## In state 104, spurious reduction of production decl -> LET def_name list(parameter) option(type_repr) EQUALS expr
 ##
 
 <YOUR SYNTAX ERROR MESSAGE HERE>

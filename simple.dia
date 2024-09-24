@@ -5,4 +5,4 @@ type Nat =
 let (+) (a b : Nat) : Nat =
   match a with
   | zero        => b
-  | (succ pred) => succ (pred + b)
+  | succ(pred) => succ (pred + b)

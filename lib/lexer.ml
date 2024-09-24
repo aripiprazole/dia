@@ -22,6 +22,7 @@ let rec token buf =
   | ')' -> RIGHT_PARENS
   | '{' -> LEFT_BRACES
   | '}' -> RIGHT_BRACES
+  | ',' -> COMMA
   | Plus (Chars " \n\t") -> token buf
   | number -> NUMBER (int_of_string (lexeme buf))
   | Plus (Chars "+-*/^=<>!&|~?%:") -> INFIX_ID (lexeme buf)

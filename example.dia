@@ -13,7 +13,7 @@ type Vect (a : Set) (n : Nat) : Set =
 
 let (++) {a : Set} {n m : Nat} (v : Vect a n) (w : Vect a m) : Vect a (n + m) =
   match v with
-  | (cons head tail) => cons head (tail ++ w)
+  | cons (head, tail) => cons head (tail ++ w)
   | nil => w
 
 type Fin (n : Nat) : Set =

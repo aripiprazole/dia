@@ -25,6 +25,7 @@
 %token PRAGMA (* #pragma *)
 %token BAR (* | *)
 %token FUN (* fun *)
+%token COMMA (* , *)
 
 %token EOF
 
@@ -83,7 +84,7 @@ case:
 pattern:
   | name = symbol;
     { P_var name }
-  | LEFT_PARENS; name = def_name; args = list(pattern); RIGHT_PARENS;
+  | name = def_name; LEFT_PARENS; args = separated_list(COMMA, pattern); RIGHT_PARENS;
     { P_constructor { name; args } }
 
 e_app: mark_position(e_app_plain) { $1 }

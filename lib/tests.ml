@@ -195,33 +195,37 @@ module Syntax_tests = struct
            (Concrete.Expr.E_src_pos (
               Concrete.Expr.E_pi {
                 domain =
-                Concrete.Expr.E_app {
-                  callee =
-                  (Concrete.Expr.E_src_pos (
-                     (Concrete.Expr.E_var
-                        Symbol.S_symbol {kind = Symbol.K_prefix; text = "f";
-                          pos = Loc.Location {startpos = :1:9; endpos = 1:10}}),
-                     Loc.Location {startpos = :1:9; endpos = 1:10}));
-                  arg =
-                  (Concrete.Expr.E_src_pos (
-                     (Concrete.Expr.E_var
-                        Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
-                          pos = Loc.Location {startpos = :1:11; endpos = 1:12}}),
-                     Loc.Location {startpos = :1:11; endpos = 1:12}))};
+                (Concrete.Expr.E_src_pos (
+                   Concrete.Expr.E_app {
+                     callee =
+                     (Concrete.Expr.E_src_pos (
+                        (Concrete.Expr.E_var
+                           Symbol.S_symbol {kind = Symbol.K_prefix; text = "f";
+                             pos = Loc.Location {startpos = :1:9; endpos = 1:10}}),
+                        Loc.Location {startpos = :1:9; endpos = 1:10}));
+                     arg =
+                     (Concrete.Expr.E_src_pos (
+                        (Concrete.Expr.E_var
+                           Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
+                             pos = Loc.Location {startpos = :1:11; endpos = 1:12}}),
+                        Loc.Location {startpos = :1:11; endpos = 1:12}))},
+                   Loc.Location {startpos = :1:9; endpos = 1:12}));
                 codomain =
-                Concrete.Expr.E_app {
-                  callee =
-                  (Concrete.Expr.E_src_pos (
-                     (Concrete.Expr.E_var
-                        Symbol.S_symbol {kind = Symbol.K_prefix; text = "f";
-                          pos = Loc.Location {startpos = :1:16; endpos = 1:17}}),
-                     Loc.Location {startpos = :1:16; endpos = 1:17}));
-                  arg =
-                  (Concrete.Expr.E_src_pos (
-                     (Concrete.Expr.E_var
-                        Symbol.S_symbol {kind = Symbol.K_prefix; text = "y";
-                          pos = Loc.Location {startpos = :1:18; endpos = 1:19}}),
-                     Loc.Location {startpos = :1:18; endpos = 1:19}))}},
+                (Concrete.Expr.E_src_pos (
+                   Concrete.Expr.E_app {
+                     callee =
+                     (Concrete.Expr.E_src_pos (
+                        (Concrete.Expr.E_var
+                           Symbol.S_symbol {kind = Symbol.K_prefix; text = "f";
+                             pos = Loc.Location {startpos = :1:16; endpos = 1:17}}),
+                        Loc.Location {startpos = :1:16; endpos = 1:17}));
+                     arg =
+                     (Concrete.Expr.E_src_pos (
+                        (Concrete.Expr.E_var
+                           Symbol.S_symbol {kind = Symbol.K_prefix; text = "y";
+                             pos = Loc.Location {startpos = :1:18; endpos = 1:19}}),
+                        Loc.Location {startpos = :1:18; endpos = 1:19}))},
+                   Loc.Location {startpos = :1:16; endpos = 1:19}))},
               Loc.Location {startpos = :1:9; endpos = 1:19}));
            pos = Loc.Location {startpos = :1:1; endpos = 1:19}}
           ]} |}]
@@ -261,39 +265,45 @@ module Syntax_tests = struct
                                      Loc.Location {startpos = :1:10; endpos = 1:11}}),
                                 Loc.Location {startpos = :1:10; endpos = 1:11}))};
                            arg =
-                           Concrete.Expr.E_app {
-                             callee =
-                             (Concrete.Expr.E_src_pos (
-                                (Concrete.Expr.E_var
-                                   Symbol.S_symbol {kind = Symbol.K_prefix;
-                                     text = "f";
-                                     pos =
-                                     Loc.Location {startpos = :1:14; endpos = 1:15}}),
-                                Loc.Location {startpos = :1:14; endpos = 1:15}));
-                             arg =
-                             (Concrete.Expr.E_src_pos (
-                                (Concrete.Expr.E_var
-                                   Symbol.S_symbol {kind = Symbol.K_prefix;
-                                     text = "x";
-                                     pos =
-                                     Loc.Location {startpos = :1:16; endpos = 1:17}}),
-                                Loc.Location {startpos = :1:16; endpos = 1:17}))}},
+                           (Concrete.Expr.E_src_pos (
+                              Concrete.Expr.E_app {
+                                callee =
+                                (Concrete.Expr.E_src_pos (
+                                   (Concrete.Expr.E_var
+                                      Symbol.S_symbol {kind = Symbol.K_prefix;
+                                        text = "f";
+                                        pos =
+                                        Loc.Location {startpos = :1:14;
+                                          endpos = 1:15}}),
+                                   Loc.Location {startpos = :1:14; endpos = 1:15}));
+                                arg =
+                                (Concrete.Expr.E_src_pos (
+                                   (Concrete.Expr.E_var
+                                      Symbol.S_symbol {kind = Symbol.K_prefix;
+                                        text = "x";
+                                        pos =
+                                        Loc.Location {startpos = :1:16;
+                                          endpos = 1:17}}),
+                                   Loc.Location {startpos = :1:16; endpos = 1:17}))},
+                              Loc.Location {startpos = :1:14; endpos = 1:17}))},
                          Loc.Location {startpos = :1:10; endpos = 1:17}))),
                    Loc.Location {startpos = :1:9; endpos = 1:18}));
                 codomain =
-                Concrete.Expr.E_app {
-                  callee =
-                  (Concrete.Expr.E_src_pos (
-                     (Concrete.Expr.E_var
-                        Symbol.S_symbol {kind = Symbol.K_prefix; text = "f";
-                          pos = Loc.Location {startpos = :1:22; endpos = 1:23}}),
-                     Loc.Location {startpos = :1:22; endpos = 1:23}));
-                  arg =
-                  (Concrete.Expr.E_src_pos (
-                     (Concrete.Expr.E_var
-                        Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
-                          pos = Loc.Location {startpos = :1:24; endpos = 1:25}}),
-                     Loc.Location {startpos = :1:24; endpos = 1:25}))}},
+                (Concrete.Expr.E_src_pos (
+                   Concrete.Expr.E_app {
+                     callee =
+                     (Concrete.Expr.E_src_pos (
+                        (Concrete.Expr.E_var
+                           Symbol.S_symbol {kind = Symbol.K_prefix; text = "f";
+                             pos = Loc.Location {startpos = :1:22; endpos = 1:23}}),
+                        Loc.Location {startpos = :1:22; endpos = 1:23}));
+                     arg =
+                     (Concrete.Expr.E_src_pos (
+                        (Concrete.Expr.E_var
+                           Symbol.S_symbol {kind = Symbol.K_prefix; text = "x";
+                             pos = Loc.Location {startpos = :1:24; endpos = 1:25}}),
+                        Loc.Location {startpos = :1:24; endpos = 1:25}))},
+                   Loc.Location {startpos = :1:22; endpos = 1:25}))},
               Loc.Location {startpos = :1:9; endpos = 1:25}));
            pos = Loc.Location {startpos = :1:1; endpos = 1:25}}
           ]} |}]
@@ -349,246 +359,321 @@ module Syntax_tests = struct
                          Loc.Location {startpos = :2:22; endpos = 2:33}))),
                    Loc.Location {startpos = :2:21; endpos = 2:34}));
                 codomain =
-                Concrete.Expr.E_pi {
-                  domain =
-                  (Concrete.Expr.E_src_pos (
-                     (Concrete.Expr.E_parens
-                        (Concrete.Expr.E_src_pos (
-                           Concrete.Expr.E_app {
-                             callee =
-                             Concrete.Expr.E_app {
-                               callee =
-                               (Concrete.Expr.E_var
-                                  Symbol.S_symbol {kind = Symbol.K_infix;
-                                    text = ":";
-                                    pos =
-                                    Loc.Location {startpos = :3:51; endpos = 3:52}});
-                               arg =
-                               (Concrete.Expr.E_src_pos (
+                (Concrete.Expr.E_src_pos (
+                   Concrete.Expr.E_pi {
+                     domain =
+                     (Concrete.Expr.E_src_pos (
+                        (Concrete.Expr.E_parens
+                           (Concrete.Expr.E_src_pos (
+                              Concrete.Expr.E_app {
+                                callee =
+                                Concrete.Expr.E_app {
+                                  callee =
                                   (Concrete.Expr.E_var
-                                     Symbol.S_symbol {kind = Symbol.K_prefix;
-                                       text = "P";
+                                     Symbol.S_symbol {kind = Symbol.K_infix;
+                                       text = ":";
                                        pos =
-                                       Loc.Location {startpos = :3:49;
-                                         endpos = 3:50}}),
-                                  Loc.Location {startpos = :3:49; endpos = 3:50}))};
-                             arg =
-                             Concrete.Expr.E_pi {
-                               domain =
-                               (Concrete.Expr.E_src_pos (
-                                  (Concrete.Expr.E_var
-                                     Symbol.S_symbol {kind = Symbol.K_prefix;
-                                       text = "Nat";
-                                       pos =
-                                       Loc.Location {startpos = :3:53;
-                                         endpos = 3:56}}),
-                                  Loc.Location {startpos = :3:53; endpos = 3:56}));
-                               codomain =
-                               (Concrete.Expr.E_src_pos (
-                                  (Concrete.Expr.E_var
-                                     Symbol.S_symbol {kind = Symbol.K_prefix;
-                                       text = "Set";
-                                       pos =
-                                       Loc.Location {startpos = :3:60;
-                                         endpos = 3:63}}),
-                                  Loc.Location {startpos = :3:60; endpos = 3:63}))}},
-                           Loc.Location {startpos = :3:49; endpos = 3:63}))),
-                     Loc.Location {startpos = :3:48; endpos = 3:64}));
-                  codomain =
-                  Concrete.Expr.E_pi {
-                    domain =
-                    (Concrete.Expr.E_src_pos (
-                       (Concrete.Expr.E_parens
-                          (Concrete.Expr.E_src_pos (
-                             Concrete.Expr.E_app {
-                               callee =
-                               Concrete.Expr.E_app {
-                                 callee =
-                                 (Concrete.Expr.E_var
-                                    Symbol.S_symbol {kind = Symbol.K_infix;
-                                      text = ":";
-                                      pos =
-                                      Loc.Location {startpos = :4:85; endpos = 4:86}});
-                                 arg =
-                                 (Concrete.Expr.E_src_pos (
-                                    (Concrete.Expr.E_var
-                                       Symbol.S_symbol {kind = Symbol.K_prefix;
-                                         text = "fzero";
-                                         pos =
-                                         Loc.Location {startpos = :4:79;
-                                           endpos = 4:84}}),
-                                    Loc.Location {startpos = :4:79; endpos = 4:84}
-                                    ))};
-                               arg =
-                               Concrete.Expr.E_app {
-                                 callee =
-                                 (Concrete.Expr.E_src_pos (
-                                    (Concrete.Expr.E_var
-                                       Symbol.S_symbol {kind = Symbol.K_prefix;
-                                         text = "P";
-                                         pos =
-                                         Loc.Location {startpos = :4:87;
-                                           endpos = 4:88}}),
-                                    Loc.Location {startpos = :4:87; endpos = 4:88}
-                                    ));
-                                 arg =
-                                 (Concrete.Expr.E_src_pos (
-                                    (Concrete.Expr.E_var
-                                       Symbol.S_symbol {kind = Symbol.K_prefix;
-                                         text = "zero";
-                                         pos =
-                                         Loc.Location {startpos = :4:89;
-                                           endpos = 4:93}}),
-                                    Loc.Location {startpos = :4:89; endpos = 4:93}
-                                    ))}},
-                             Loc.Location {startpos = :4:79; endpos = 4:93}))),
-                       Loc.Location {startpos = :4:78; endpos = 4:94}));
-                    codomain =
-                    Concrete.Expr.E_pi {
-                      domain =
-                      (Concrete.Expr.E_src_pos (
-                         (Concrete.Expr.E_parens
-                            (Concrete.Expr.E_src_pos (
-                               Concrete.Expr.E_app {
-                                 callee =
-                                 Concrete.Expr.E_app {
-                                   callee =
-                                   (Concrete.Expr.E_var
-                                      Symbol.S_symbol {kind = Symbol.K_infix;
-                                        text = ":";
-                                        pos =
-                                        Loc.Location {startpos = :5:115;
-                                          endpos = 5:116}});
-                                   arg =
-                                   (Concrete.Expr.E_src_pos (
-                                      (Concrete.Expr.E_var
-                                         Symbol.S_symbol {kind = Symbol.K_prefix;
-                                           text = "fsuc";
-                                           pos =
-                                           Loc.Location {startpos = :5:109;
-                                             endpos = 5:113}}),
-                                      Loc.Location {startpos = :5:109;
-                                        endpos = 5:113}
-                                      ))};
-                                 arg =
-                                 Concrete.Expr.E_pi {
-                                   domain =
-                                   (Concrete.Expr.E_src_pos (
-                                      (Concrete.Expr.E_parens
-                                         (Concrete.Expr.E_src_pos (
-                                            Concrete.Expr.E_app {
-                                              callee =
-                                              Concrete.Expr.E_app {
-                                                callee =
-                                                (Concrete.Expr.E_var
-                                                   Symbol.S_symbol {
-                                                     kind = Symbol.K_infix;
-                                                     text = ":";
-                                                     pos =
-                                                     Loc.Location {
-                                                       startpos = :5:123;
-                                                       endpos = 5:124}});
-                                                arg =
-                                                (Concrete.Expr.E_src_pos (
-                                                   (Concrete.Expr.E_var
-                                                      Symbol.S_symbol {
-                                                        kind = Symbol.K_prefix;
-                                                        text = "pred";
-                                                        pos =
-                                                        Loc.Location {
-                                                          startpos = :5:118;
-                                                          endpos = 5:122}}),
-                                                   Loc.Location {startpos = :5:118;
-                                                     endpos = 5:122}
-                                                   ))};
-                                              arg =
-                                              (Concrete.Expr.E_src_pos (
-                                                 (Concrete.Expr.E_var
-                                                    Symbol.S_symbol {
-                                                      kind = Symbol.K_prefix;
-                                                      text = "Nat";
-                                                      pos =
-                                                      Loc.Location {
-                                                        startpos = :5:125;
-                                                        endpos = 5:128}}),
-                                                 Loc.Location {startpos = :5:125;
-                                                   endpos = 5:128}
-                                                 ))},
-                                            Loc.Location {startpos = :5:118;
-                                              endpos = 5:128}
-                                            ))),
-                                      Loc.Location {startpos = :5:117;
-                                        endpos = 5:129}
-                                      ));
-                                   codomain =
-                                   Concrete.Expr.E_app {
-                                     callee =
+                                       Loc.Location {startpos = :3:51;
+                                         endpos = 3:52}});
+                                  arg =
+                                  (Concrete.Expr.E_src_pos (
+                                     (Concrete.Expr.E_var
+                                        Symbol.S_symbol {kind = Symbol.K_prefix;
+                                          text = "P";
+                                          pos =
+                                          Loc.Location {startpos = :3:49;
+                                            endpos = 3:50}}),
+                                     Loc.Location {startpos = :3:49; endpos = 3:50}
+                                     ))};
+                                arg =
+                                (Concrete.Expr.E_src_pos (
+                                   Concrete.Expr.E_pi {
+                                     domain =
                                      (Concrete.Expr.E_src_pos (
                                         (Concrete.Expr.E_var
                                            Symbol.S_symbol {kind = Symbol.K_prefix;
-                                             text = "P";
+                                             text = "Nat";
                                              pos =
-                                             Loc.Location {startpos = :5:133;
-                                               endpos = 5:134}}),
-                                        Loc.Location {startpos = :5:133;
-                                          endpos = 5:134}
+                                             Loc.Location {startpos = :3:53;
+                                               endpos = 3:56}}),
+                                        Loc.Location {startpos = :3:53;
+                                          endpos = 3:56}
                                         ));
+                                     codomain =
+                                     (Concrete.Expr.E_src_pos (
+                                        (Concrete.Expr.E_var
+                                           Symbol.S_symbol {kind = Symbol.K_prefix;
+                                             text = "Set";
+                                             pos =
+                                             Loc.Location {startpos = :3:60;
+                                               endpos = 3:63}}),
+                                        Loc.Location {startpos = :3:60;
+                                          endpos = 3:63}
+                                        ))},
+                                   Loc.Location {startpos = :3:53; endpos = 3:63}))},
+                              Loc.Location {startpos = :3:49; endpos = 3:63}))),
+                        Loc.Location {startpos = :3:48; endpos = 3:64}));
+                     codomain =
+                     (Concrete.Expr.E_src_pos (
+                        Concrete.Expr.E_pi {
+                          domain =
+                          (Concrete.Expr.E_src_pos (
+                             (Concrete.Expr.E_parens
+                                (Concrete.Expr.E_src_pos (
+                                   Concrete.Expr.E_app {
+                                     callee =
+                                     Concrete.Expr.E_app {
+                                       callee =
+                                       (Concrete.Expr.E_var
+                                          Symbol.S_symbol {kind = Symbol.K_infix;
+                                            text = ":";
+                                            pos =
+                                            Loc.Location {startpos = :4:85;
+                                              endpos = 4:86}});
+                                       arg =
+                                       (Concrete.Expr.E_src_pos (
+                                          (Concrete.Expr.E_var
+                                             Symbol.S_symbol {
+                                               kind = Symbol.K_prefix;
+                                               text = "fzero";
+                                               pos =
+                                               Loc.Location {startpos = :4:79;
+                                                 endpos = 4:84}}),
+                                          Loc.Location {startpos = :4:79;
+                                            endpos = 4:84}
+                                          ))};
                                      arg =
                                      (Concrete.Expr.E_src_pos (
-                                        (Concrete.Expr.E_parens
-                                           (Concrete.Expr.E_src_pos (
-                                              Concrete.Expr.E_app {
-                                                callee =
-                                                (Concrete.Expr.E_src_pos (
-                                                   (Concrete.Expr.E_var
-                                                      Symbol.S_symbol {
-                                                        kind = Symbol.K_prefix;
-                                                        text = "succ";
-                                                        pos =
+                                        Concrete.Expr.E_app {
+                                          callee =
+                                          (Concrete.Expr.E_src_pos (
+                                             (Concrete.Expr.E_var
+                                                Symbol.S_symbol {
+                                                  kind = Symbol.K_prefix;
+                                                  text = "P";
+                                                  pos =
+                                                  Loc.Location {startpos = :4:87;
+                                                    endpos = 4:88}}),
+                                             Loc.Location {startpos = :4:87;
+                                               endpos = 4:88}
+                                             ));
+                                          arg =
+                                          (Concrete.Expr.E_src_pos (
+                                             (Concrete.Expr.E_var
+                                                Symbol.S_symbol {
+                                                  kind = Symbol.K_prefix;
+                                                  text = "zero";
+                                                  pos =
+                                                  Loc.Location {startpos = :4:89;
+                                                    endpos = 4:93}}),
+                                             Loc.Location {startpos = :4:89;
+                                               endpos = 4:93}
+                                             ))},
+                                        Loc.Location {startpos = :4:87;
+                                          endpos = 4:93}
+                                        ))},
+                                   Loc.Location {startpos = :4:79; endpos = 4:93}))),
+                             Loc.Location {startpos = :4:78; endpos = 4:94}));
+                          codomain =
+                          (Concrete.Expr.E_src_pos (
+                             Concrete.Expr.E_pi {
+                               domain =
+                               (Concrete.Expr.E_src_pos (
+                                  (Concrete.Expr.E_parens
+                                     (Concrete.Expr.E_src_pos (
+                                        Concrete.Expr.E_app {
+                                          callee =
+                                          Concrete.Expr.E_app {
+                                            callee =
+                                            (Concrete.Expr.E_var
+                                               Symbol.S_symbol {
+                                                 kind = Symbol.K_infix; text = ":";
+                                                 pos =
+                                                 Loc.Location {startpos = :5:115;
+                                                   endpos = 5:116}});
+                                            arg =
+                                            (Concrete.Expr.E_src_pos (
+                                               (Concrete.Expr.E_var
+                                                  Symbol.S_symbol {
+                                                    kind = Symbol.K_prefix;
+                                                    text = "fsuc";
+                                                    pos =
+                                                    Loc.Location {
+                                                      startpos = :5:109;
+                                                      endpos = 5:113}}),
+                                               Loc.Location {startpos = :5:109;
+                                                 endpos = 5:113}
+                                               ))};
+                                          arg =
+                                          (Concrete.Expr.E_src_pos (
+                                             Concrete.Expr.E_pi {
+                                               domain =
+                                               (Concrete.Expr.E_src_pos (
+                                                  (Concrete.Expr.E_parens
+                                                     (Concrete.Expr.E_src_pos (
+                                                        Concrete.Expr.E_app {
+                                                          callee =
+                                                          Concrete.Expr.E_app {
+                                                            callee =
+                                                            (Concrete.Expr.E_var
+                                                               Symbol.S_symbol {
+                                                                 kind =
+                                                                 Symbol.K_infix;
+                                                                 text = ":";
+                                                                 pos =
+                                                                 Loc.Location {
+                                                                   startpos =
+                                                                   :5:123;
+                                                                   endpos = 5:124}});
+                                                            arg =
+                                                            (Concrete.Expr.E_src_pos (
+                                                               (Concrete.Expr.E_var
+                                                                  Symbol.S_symbol {
+                                                                    kind =
+                                                                    Symbol.K_prefix;
+                                                                    text = "pred";
+                                                                    pos =
+                                                                    Loc.Location {
+                                                                      startpos =
+                                                                      :5:118;
+                                                                      endpos =
+                                                                      5:122}}),
+                                                               Loc.Location {
+                                                                 startpos = :5:118;
+                                                                 endpos = 5:122}
+                                                               ))};
+                                                          arg =
+                                                          (Concrete.Expr.E_src_pos (
+                                                             (Concrete.Expr.E_var
+                                                                Symbol.S_symbol {
+                                                                  kind =
+                                                                  Symbol.K_prefix;
+                                                                  text = "Nat";
+                                                                  pos =
+                                                                  Loc.Location {
+                                                                    startpos =
+                                                                    :5:125;
+                                                                    endpos = 5:128}}),
+                                                             Loc.Location {
+                                                               startpos = :5:125;
+                                                               endpos = 5:128}
+                                                             ))},
                                                         Loc.Location {
-                                                          startpos = :5:136;
-                                                          endpos = 5:140}}),
-                                                   Loc.Location {startpos = :5:136;
-                                                     endpos = 5:140}
-                                                   ));
-                                                arg =
-                                                (Concrete.Expr.E_src_pos (
-                                                   (Concrete.Expr.E_var
-                                                      Symbol.S_symbol {
-                                                        kind = Symbol.K_prefix;
-                                                        text = "pred";
-                                                        pos =
-                                                        Loc.Location {
-                                                          startpos = :5:141;
-                                                          endpos = 5:145}}),
-                                                   Loc.Location {startpos = :5:141;
-                                                     endpos = 5:145}
-                                                   ))},
-                                              Loc.Location {startpos = :5:136;
-                                                endpos = 5:145}
-                                              ))),
-                                        Loc.Location {startpos = :5:135;
+                                                          startpos = :5:118;
+                                                          endpos = 5:128}
+                                                        ))),
+                                                  Loc.Location {startpos = :5:117;
+                                                    endpos = 5:129}
+                                                  ));
+                                               codomain =
+                                               (Concrete.Expr.E_src_pos (
+                                                  Concrete.Expr.E_app {
+                                                    callee =
+                                                    (Concrete.Expr.E_src_pos (
+                                                       (Concrete.Expr.E_var
+                                                          Symbol.S_symbol {
+                                                            kind = Symbol.K_prefix;
+                                                            text = "P";
+                                                            pos =
+                                                            Loc.Location {
+                                                              startpos = :5:133;
+                                                              endpos = 5:134}}),
+                                                       Loc.Location {
+                                                         startpos = :5:133;
+                                                         endpos = 5:134}
+                                                       ));
+                                                    arg =
+                                                    (Concrete.Expr.E_src_pos (
+                                                       (Concrete.Expr.E_parens
+                                                          (Concrete.Expr.E_src_pos (
+                                                             Concrete.Expr.E_app {
+                                                               callee =
+                                                               (Concrete.Expr.E_src_pos (
+                                                                  (Concrete.Expr.E_var
+                                                                     Symbol.S_symbol {
+                                                                       kind =
+                                                                       Symbol.K_prefix;
+                                                                       text =
+                                                                       "succ";
+                                                                       pos =
+                                                                       Loc.Location {
+                                                                         startpos =
+                                                                         :5:136;
+                                                                         endpos =
+                                                                         5:140}}),
+                                                                  Loc.Location {
+                                                                    startpos =
+                                                                    :5:136;
+                                                                    endpos = 5:140}
+                                                                  ));
+                                                               arg =
+                                                               (Concrete.Expr.E_src_pos (
+                                                                  (Concrete.Expr.E_var
+                                                                     Symbol.S_symbol {
+                                                                       kind =
+                                                                       Symbol.K_prefix;
+                                                                       text =
+                                                                       "pred";
+                                                                       pos =
+                                                                       Loc.Location {
+                                                                         startpos =
+                                                                         :5:141;
+                                                                         endpos =
+                                                                         5:145}}),
+                                                                  Loc.Location {
+                                                                    startpos =
+                                                                    :5:141;
+                                                                    endpos = 5:145}
+                                                                  ))},
+                                                             Loc.Location {
+                                                               startpos = :5:136;
+                                                               endpos = 5:145}
+                                                             ))),
+                                                       Loc.Location {
+                                                         startpos = :5:135;
+                                                         endpos = 5:146}
+                                                       ))},
+                                                  Loc.Location {startpos = :5:133;
+                                                    endpos = 5:146}
+                                                  ))},
+                                             Loc.Location {startpos = :5:117;
+                                               endpos = 5:146}
+                                             ))},
+                                        Loc.Location {startpos = :5:109;
                                           endpos = 5:146}
-                                        ))}}},
-                               Loc.Location {startpos = :5:109; endpos = 5:146}))),
-                         Loc.Location {startpos = :5:108; endpos = 5:147}));
-                      codomain =
-                      Concrete.Expr.E_app {
-                        callee =
-                        (Concrete.Expr.E_src_pos (
-                           (Concrete.Expr.E_var
-                              Symbol.S_symbol {kind = Symbol.K_prefix; text = "P";
-                                pos =
-                                Loc.Location {startpos = :6:161; endpos = 6:162}}),
-                           Loc.Location {startpos = :6:161; endpos = 6:162}));
-                        arg =
-                        (Concrete.Expr.E_src_pos (
-                           (Concrete.Expr.E_var
-                              Symbol.S_symbol {kind = Symbol.K_prefix;
-                                text = "value";
-                                pos =
-                                Loc.Location {startpos = :6:163; endpos = 6:168}}),
-                           Loc.Location {startpos = :6:163; endpos = 6:168}))}}}}},
+                                        ))),
+                                  Loc.Location {startpos = :5:108; endpos = 5:147}
+                                  ));
+                               codomain =
+                               (Concrete.Expr.E_src_pos (
+                                  Concrete.Expr.E_app {
+                                    callee =
+                                    (Concrete.Expr.E_src_pos (
+                                       (Concrete.Expr.E_var
+                                          Symbol.S_symbol {kind = Symbol.K_prefix;
+                                            text = "P";
+                                            pos =
+                                            Loc.Location {startpos = :6:161;
+                                              endpos = 6:162}}),
+                                       Loc.Location {startpos = :6:161;
+                                         endpos = 6:162}
+                                       ));
+                                    arg =
+                                    (Concrete.Expr.E_src_pos (
+                                       (Concrete.Expr.E_var
+                                          Symbol.S_symbol {kind = Symbol.K_prefix;
+                                            text = "value";
+                                            pos =
+                                            Loc.Location {startpos = :6:163;
+                                              endpos = 6:168}}),
+                                       Loc.Location {startpos = :6:163;
+                                         endpos = 6:168}
+                                       ))},
+                                  Loc.Location {startpos = :6:161; endpos = 6:168}
+                                  ))},
+                             Loc.Location {startpos = :5:108; endpos = 6:168}))},
+                        Loc.Location {startpos = :4:78; endpos = 6:168}))},
+                   Loc.Location {startpos = :3:48; endpos = 6:168}))},
               Loc.Location {startpos = :2:21; endpos = 6:168}));
            pos = Loc.Location {startpos = :1:1; endpos = 6:168}}
           ]} |}]
