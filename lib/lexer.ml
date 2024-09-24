@@ -14,7 +14,8 @@ let rec token buf =
   | "fun" -> FUN
   | "->" -> ARROW
   | "=>" -> DOUBLE_ARROW
-  | ":=" -> DEF_EQUALS
+  | "=" -> EQUALS
+  | ":" -> COLON
   | "|" -> BAR
   | '(' -> LEFT_PARENS
   | ')' -> RIGHT_PARENS

@@ -84,7 +84,7 @@ let solve gamma h sp rhs =
     |> List.map snd (* Reverts the list *)
     |> List.rev (* Builds lambdas over lambdas *)
     |> List.fold_left
-         (fun acc next -> T_lam (Symbol.make K_hole, next, acc))
+         (fun acc next -> T_lam (Symbol.make K_hole "_", next, acc))
          rhs
   in
   h <-- eval [] lams

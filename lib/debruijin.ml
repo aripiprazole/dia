@@ -1,3 +1,5 @@
+open Symbol
+
 type lvl = int [@@deriving show]
 
 type idx =
@@ -8,7 +10,7 @@ type idx =
 [@@deriving show]
 
 (* Inverts the levels into indexes *)
-let lvl_to_idx l x = Idx { name = Symbol.make Symbol.K_hole; value = l - x - 1 }
+let lvl_to_idx l x = Idx { name = Symbol.make K_hole "_"; value = l - x - 1 }
 
 (* Shifts level up *)
 let shift l = l + 1

@@ -1,13 +1,17 @@
 type kind =
-  | K_prefix of string
-  | K_infix of string
-  | K_postfix of string
+  | K_prefix
+  | K_infix
+  | K_postfix
   | K_hole
 
-type t = S_symbol of kind * Loc.t
+type t =
+  | S_symbol of {
+      kind : kind;
+      text : string;
+      pos : Loc.t;
+    }
 
 val pp : Format.formatter -> t -> unit
 val show : t -> string
-val make : kind -> t
-val name : kind -> string option
-val map : (string -> kind) -> t -> t
+val text : t -> string
+val make : kind -> string -> t

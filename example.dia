@@ -7,10 +7,10 @@ let Nat :=
 
 #pragma NATURAL Nat
 
-let (=) {A : Set} (a b : A) : Set := inductive
+type (=) {A : Set} (a b : A) : Set =
 | refl : a = a
 
-let Vect (a : Set) (n : Nat) : Set :=
+type Vect (a : Set) (n : Nat) : Set =
 | cons : (head : a) -> (tail : Vect a n) -> Vect a (n + 1)
 | nil : Vect a 0
 
@@ -20,18 +20,18 @@ let (++) {a : Set} {n m : Nat} (v : Vect a n) (w : Vect a m) : Vect a (n + m) :=
   | nil => w
 
 (* Finite numbers *)
-let Fin (n : Nat) : Set := inductive
+type Fin (n : Nat) : Set =
 | fzero : Fin (n + 1)
 | fsucc : Fin n -> Fin (n + 1)
 
-let (<) {n m : Nat} := inductive
+type (<) {n m : Nat} =
 | z<s : n < m
 | s<s :
   n < m
   ---------
   n < m + 1
 
-let False : Set := inductive
+type False : Set =
 
 let absurd {a : Set} (f : False) : a :=
   match f with

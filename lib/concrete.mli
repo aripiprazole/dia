@@ -23,6 +23,8 @@ module Expr : sig
     | E_hole
     | E_num of int
     | E_src_pos of t * Loc.t
+    | E_parens of t
+    | E_braces of t
     | E_var of Symbol.t
     | E_lam of {
         params : Symbol.t list;
@@ -30,7 +32,6 @@ module Expr : sig
       }
     | E_app of {
         callee : t;
-        icit : icit;
         arg : t;
       }
     | E_pi of {
@@ -98,11 +99,9 @@ type program =
       declarations : Top_level.t list;
     }
 
-val e_app : Expr.t -> icit -> Expr.t -> Expr.t
 val e_let : Symbol.t -> Expr.t -> Expr.t -> Expr.t
 val e_match : Expr.t -> (Pattern.t * Expr.t) list -> Expr.t
 val e_lam : Symbol.t list -> Expr.t -> Expr.t
 val e_pi : Expr.t -> Expr.t -> Expr.t
-val curry : Expr.t -> (icit * Expr.t) list -> Expr.t
 val pp_program : Format.formatter -> program -> unit
 val show_program : program -> string

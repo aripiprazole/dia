@@ -20,6 +20,8 @@ module Expr = struct
     | E_hole
     | E_num of int
     | E_src_pos of t * Loc.t
+    | E_parens of t
+    | E_braces of t
     | E_var of Symbol.t
     | E_lam of {
         params : Symbol.t list;
@@ -27,7 +29,6 @@ module Expr = struct
       }
     | E_app of {
         callee : t;
-        icit : icit;
         arg : t;
       }
     | E_pi of {
@@ -90,14 +91,7 @@ type program =
     }
 [@@deriving show]
 
-let e_app callee icit arg = Expr.E_app { callee; icit; arg }
 let e_let name value next = Expr.E_let { name; value; next }
 let e_match scrutinee cases = Expr.E_match { scrutinee; cases }
 let e_lam params body = Expr.E_lam { params; body }
 let e_pi domain codomain = Expr.E_pi { domain; codomain }
-
-let curry callee args =
-  args
-  |> List.fold_left
-       (fun callee (icit, arg) -> Expr.E_app { callee; icit; arg })
-       callee

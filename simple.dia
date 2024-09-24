@@ -1,4 +1,8 @@
-let add (a b : Nat) : Nat :=
+type Nat =
+| zero
+| succ : Nat -> Nat
+
+let add (a b : Nat) : Nat =
   match a with
   | zero        => b
   | (succ pred) => succ (add pred b)

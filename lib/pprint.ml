@@ -30,18 +30,25 @@ let rec pprint prec ns = function
 | _ -> assert false
 
 and pp_pi_param prec ns = function
-| Dom { name = S_symbol (k, _); icit = Concrete.Expl; dom } -> begin
-    match Symbol.name k with
-    | Some s -> sprintf "(%s : %s)" s (pprint prec ns dom)
-    | None -> sprintf "%s" (pprint prec ns dom)
+| Dom { name = S_symbol { kind; text; _ }; icit = Concrete.Expl; dom } -> begin
+    match kind with
+    | K_hole -> sprintf "%s" (pprint prec ns dom)
+    | _ -> sprintf "(%s : %s)" text (pprint prec ns dom)
   end
-| Dom { name = S_symbol (k, _); icit = Concrete.Impl; dom } -> begin
-    match Symbol.name k with
-    | Some s -> sprintf "{%s : %s}" s (pprint prec ns dom)
-    | None -> sprintf "{%s}" (pprint prec ns dom)
+| Dom { name = S_symbol { kind; text; _ }; icit = Concrete.Impl; dom } -> begin
+    match kind with
+    | K_hole -> sprintf "{%s}" (pprint prec ns dom)
+    | _ -> sprintf "{%s : %s}" text (pprint prec ns dom)
   end
 
 and pp_lam_param = function
-| S_symbol (k, _), Concrete.Expl -> Option.value (Symbol.name k) ~default:"_"
-| S_symbol (k, _), Concrete.Impl ->
-    "{" ^ Option.value (Symbol.name k) ~default:"_" ^ "}"
+| S_symbol { kind; text; _ }, Concrete.Expl -> begin
+    match kind with
+    | K_hole -> "_"
+    | _ -> text
+  end
+| S_symbol { kind; text; _ }, Concrete.Impl -> begin
+    match kind with
+    | K_hole -> "{_}"
+    | _ -> "{" ^ text ^ "}"
+  end
